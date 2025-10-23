@@ -18,7 +18,7 @@ return [
                 /*
                  * Edit to include full URL in ui for assets
                  */
-                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+                'use_absolute_path' => false,
 
                 /*
                 * Edit to set path where swagger ui assets should be stored
@@ -28,7 +28,7 @@ return [
                 /*
                  * File name of the generated json documentation file
                  */
-                'docs_json' => 'api-docs.json',
+                'docs_json' => 'swagger.json',
 
                 /*
                  * File name of the generated YAML documentation file
@@ -91,7 +91,7 @@ return [
             /*
              * Edit to set the api's base path
              */
-            'base' => env('L5_SWAGGER_BASE_PATH', null),
+            'base' => env('L5_SWAGGER_BASE_PATH', '/api/v1'),
 
             /*
              * Absolute path to directories that should be excluded from scanning
@@ -234,10 +234,10 @@ return [
         ],
 
         /*
-         * Set this to `true` in development mode so that docs would be regenerated on each request
-         * Set this to `false` to disable swagger generation on production
-         */
-        'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
+          * Set this to `true` in development mode so that docs would be regenerated on each request
+          * Set this to `false` to disable swagger generation on production
+          */
+         'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', true),
 
         /*
          * Set this to `true` to generate a copy of documentation in yaml format
