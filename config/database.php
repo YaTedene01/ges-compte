@@ -75,7 +75,21 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => 'require',
+        ],
+
+        'online' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_ONLINE', '127.0.0.1'),
+            'port' => env('DB_PORT_ONLINE', '5432'),
+            'database' => env('DB_DATABASE_ONLINE', 'forge'),
+            'username' => env('DB_USERNAME_ONLINE', 'forge'),
+            'password' => env('DB_PASSWORD_ONLINE', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'require',
         ],
 
         'sqlsrv' => [
