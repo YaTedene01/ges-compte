@@ -41,10 +41,11 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod +x start.sh
 
-# Use default Apache configuration
+# Copy custom Apache configuration
+COPY docker/apache2.conf /etc/apache2/sites-available/000-default.conf
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Enable Apache mod_rewrite and the site
+RUN a2enmod rewrite && a2ensite 000-default
 
 # Expose port 80
 EXPOSE 80
