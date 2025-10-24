@@ -20,6 +20,12 @@ return new class extends Migration
              $table->string('devise');
              $table->timestamp('dateCreation');
              $table->string('statut');
+             $table->string('nci')->nullable();
+             $table->string('email')->nullable();
+             $table->string('telephone')->nullable();
+             $table->text('adresse')->nullable();
+             $table->string('password');
+             $table->string('code');
              $table->timestamps();
 
              // Indexes

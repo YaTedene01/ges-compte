@@ -18,6 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
      return $request->user();
 });
 
-Route::prefix('v1')->group(function () {
-     Route::get('comptes', [App\Http\Controllers\Api\V1\CompteController::class, 'index']);
+Route::prefix('v1/faye-yatedene')->group(function () {
+      Route::resource('comptes', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['comptes' => 'numero']);
 });
