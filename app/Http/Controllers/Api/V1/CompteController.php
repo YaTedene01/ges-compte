@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Compte;
 use App\Http\Resources\CompteResource;
 use App\Traits\ApiResponseTrait;
+use App\Exceptions\CompteNotFoundException;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
 
@@ -38,7 +39,7 @@ class CompteController extends Controller
 
      /**
       * @OA\Get(
-      *     path="/comptes",
+      *     path="/v1/faye-yatedene/comptes",
       *     summary="Liste des comptes",
       *     description="Récupère la liste des comptes avec filtres et pagination",
       *     tags={"Comptes"},
@@ -107,15 +108,7 @@ class CompteController extends Controller
      {
          $query = Compte::with('client');
 
-         // Filters
-         if ($request->has('type')) {
-             $query->where('type', $request->type);
-         }
-
-         if ($request->has('statut')) {
-             $query->where('statut', $request->statut);
-         }
-
+         // Search filter (since global scope handles type and status)
          if ($request->has('search')) {
              $search = $request->search;
              $query->where('titulaire', 'like', "%{$search}%")
@@ -131,24 +124,7 @@ class CompteController extends Controller
          $limit = min($request->get('limit', 10), 100);
          $paginator = $query->paginate($limit)->appends($request->query());
 
-         return response()->json([
-             'success' => true,
-             'data' => CompteResource::collection($paginator->items()),
-             'pagination' => [
-                 'currentPage' => $paginator->currentPage(),
-                 'totalPages' => $paginator->lastPage(),
-                 'totalItems' => $paginator->total(),
-                 'itemsPerPage' => $paginator->perPage(),
-                 'hasNext' => $paginator->hasMorePages(),
-                 'hasPrevious' => $paginator->currentPage() > 1,
-             ],
-             'links' => [
-                 'self' => $paginator->url($paginator->currentPage()),
-                 'next' => $paginator->nextPageUrl(),
-                 'first' => $paginator->url(1),
-                 'last' => $paginator->url($paginator->lastPage()),
-             ],
-         ]);
+         return $this->paginatedResponse($paginator, 'Liste des comptes récupérée avec succès');
      }
 
     /**
@@ -162,9 +138,15 @@ class CompteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $numero)
     {
-        //
+        $compte = Compte::numero($numero)->first();
+
+        if (!$compte) {
+            throw new CompteNotFoundException('Compte non trouvé avec le numéro ' . $numero);
+        }
+
+        return $this->successResponse(new CompteResource($compte), 'Compte récupéré avec succès');
     }
 
     /**
