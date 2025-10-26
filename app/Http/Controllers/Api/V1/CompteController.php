@@ -9,6 +9,7 @@ use App\Http\Resources\CompteResource;
 use App\Traits\ApiResponseTrait;
 use App\Http\Requests\CompteCreationRequest;
 use App\Http\Requests\CompteBloquerRequest;
+use App\Exceptions\CompteNotFoundException;
 use Illuminate\Http\Request;
 
 class CompteController extends Controller
@@ -221,11 +222,49 @@ class CompteController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/v1/faye-yatedene/comptes/{compteId}",
+     *     summary="Récupérer un compte spécifique",
+     *     description="Récupère les détails d'un compte spécifique par son ID",
+     *     tags={"Comptes"},
+     *     @OA\Parameter(
+     *         name="compteId",
+     *         in="path",
+     *         description="ID du compte",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails du compte",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="data", ref="#/components/schemas/Compte")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Compte non trouvé",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="COMPTE_NOT_FOUND"),
+     *                 @OA\Property(property="message", type="string", example="Le compte avec l'ID spécifié n'existe pas"),
+     *                 @OA\Property(property="details", type="object")
+     *             )
+     *         )
+     *     )
+     * )
      */
-    public function show(string $id)
+    public function show(string $compteId)
     {
-        //
+        $compte = Compte::where('numeroCompte', $compteId)->first();
+
+        if (!$compte) {
+            throw new CompteNotFoundException($compteId);
+        }
+
+        return $this->successResponse(new CompteResource($compte), 'Compte récupéré avec succès');
     }
 
     /**
