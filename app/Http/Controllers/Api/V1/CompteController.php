@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Http\Resources\CompteResource;
 use App\Traits\ApiResponseTrait;
 use App\Http\Requests\CompteCreationRequest;
+use App\Http\Requests\CompteBloquerRequest;
 use Illuminate\Http\Request;
 
 class CompteController extends Controller
@@ -241,5 +242,22 @@ class CompteController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Bloquer un compte.
+     */
+    public function bloquer(CompteBloquerRequest $request, string $compteId)
+    {
+        $compte = Compte::where('numeroCompte', $compteId)->firstOrFail();
+
+        $compte->update([
+            'statut' => 'bloque',
+            'motifBlocage' => $request->motifBlocage,
+            'dateDebutBlocage' => $request->dateDebutBlocage,
+            'dateFinBlocage' => $request->dateFinBlocage,
+        ]);
+
+        return $this->successResponse(new CompteResource($compte), 'Compte bloqué avec succès');
     }
 }

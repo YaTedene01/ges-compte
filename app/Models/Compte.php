@@ -24,12 +24,16 @@ class Compte extends Model
          'dateCreation',
          'statut',
          'motifBlocage',
+         'dateDebutBlocage',
+         'dateFinBlocage',
          'metadata',
          'client_id',
      ];
 
     protected $casts = [
          'dateCreation' => 'date',
+         'dateDebutBlocage' => 'datetime',
+         'dateFinBlocage' => 'datetime',
          'metadata' => 'array',
      ];
 

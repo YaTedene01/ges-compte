@@ -19,5 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1/faye-yatedene')->group(function () {
-      Route::resource('comptes', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['comptes' => 'numero']);
+       Route::resource('comptes', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['comptes' => 'numero']);
+       Route::post('comptes/{compteId}/bloquer', [App\Http\Controllers\Api\V1\CompteController::class, 'bloquer']);
 });
