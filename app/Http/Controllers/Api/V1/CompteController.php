@@ -10,8 +10,12 @@ use App\Http\Resources\CompteResource;
 use App\Traits\ApiResponseTrait;
 use App\Http\Requests\CompteCreationRequest;
 use App\Http\Requests\CompteBloquerRequest;
+use App\Http\Requests\CompteUpdateRequest;
 use App\Exceptions\CompteNotFoundException;
+use App\Rules\SenegalesePhoneNumber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class CompteController extends Controller
 {
@@ -269,11 +273,155 @@ class CompteController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Patch(
+     *     path="/v1/faye-yatedene/comptes/{numero}",
+     *     summary="Mettre à jour un compte",
+     *     description="Met à jour les informations du compte et du client associé",
+     *     tags={"Comptes"},
+     *     @OA\Parameter(
+     *         name="numero",
+     *         in="path",
+     *         description="Numéro du compte",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="titulaire", type="string", example="Amadou Diallo Junior"),
+     *             @OA\Property(property="informationsClient", type="object",
+     *                 @OA\Property(property="telephone", type="string", example="+221771234568"),
+     *                 @OA\Property(property="email", type="string", format="email", example="amadou.diallo@example.com"),
+     *                 @OA\Property(property="password", type="string", example="newpassword123"),
+     *                 @OA\Property(property="nci", type="string", example="1234567890123")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Compte mis à jour avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Compte mis à jour avec succès"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Compte")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Compte non trouvé",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="COMPTE_NOT_FOUND"),
+     *                 @OA\Property(property="message", type="string", example="Le compte avec le numéro spécifié n'existe pas")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Données invalides",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
+     *                 @OA\Property(property="message", type="string", example="Les données fournies sont invalides"),
+     *                 @OA\Property(property="details", type="object")
+     *             )
+     *         )
+     *     )
+     * )
      */
-    public function update(Request $request, string $id)
+    public function update(CompteUpdateRequest $request, string $numero)
     {
-        //
+        $compte = Compte::where('numeroCompte', $numero)->firstOrFail();
+        $client = $compte->client;
+
+        $validated = $request->validated();
+
+        // Check if at least one field is provided
+        $hasTitulaire = isset($validated['titulaire']);
+        $hasClientInfo = isset($validated['informationsClient']) && is_array($validated['informationsClient']) &&
+                         (isset($validated['informationsClient']['telephone']) ||
+                          isset($validated['informationsClient']['email']) ||
+                          isset($validated['informationsClient']['password']) ||
+                          isset($validated['informationsClient']['nci']));
+
+        if (!$hasTitulaire && !$hasClientInfo) {
+            return $this->errorResponse('Au moins un champ de modification doit être fourni.', 422);
+        }
+
+        // Validate unique constraints manually
+        if (isset($validated['informationsClient']['telephone'])) {
+            $existingClient = Client::where('telephone', $validated['informationsClient']['telephone'])
+                                   ->where('id', '!=', $client->id)->first();
+            if ($existingClient) {
+                return $this->errorResponse('Ce numéro de téléphone est déjà utilisé.', 422);
+            }
+        }
+
+        if (isset($validated['informationsClient']['email'])) {
+            $existingClient = Client::where('email', $validated['informationsClient']['email'])
+                                   ->where('id', '!=', $client->id)->first();
+            if ($existingClient) {
+                return $this->errorResponse('Cette adresse email est déjà utilisée.', 422);
+            }
+        }
+
+        if (isset($validated['informationsClient']['nci'])) {
+            $existingClient = Client::where('nci', $validated['informationsClient']['nci'])
+                                   ->where('id', '!=', $client->id)->first();
+            if ($existingClient) {
+                return $this->errorResponse('Ce numéro NCI est déjà utilisé.', 422);
+            }
+        }
+
+        // Validate Senegalese phone number
+        if (isset($validated['informationsClient']['telephone'])) {
+            $phoneRule = new SenegalesePhoneNumber();
+            $phoneRule->validate('telephone', $validated['informationsClient']['telephone'], function ($message) {
+                throw new \Exception($message);
+            });
+        }
+
+        // Update Compte
+        if (isset($validated['titulaire'])) {
+            $compte->update(['titulaire' => $validated['titulaire']]);
+        }
+
+        // Update Client
+        if (isset($validated['informationsClient'])) {
+            $clientData = [];
+
+            if (isset($validated['informationsClient']['telephone'])) {
+                $clientData['telephone'] = $validated['informationsClient']['telephone'];
+            }
+
+            if (isset($validated['informationsClient']['email'])) {
+                $clientData['email'] = $validated['informationsClient']['email'];
+            }
+
+            if (isset($validated['informationsClient']['password'])) {
+                $clientData['password'] = Hash::make($validated['informationsClient']['password']);
+            }
+
+            if (isset($validated['informationsClient']['nci'])) {
+                $clientData['nci'] = $validated['informationsClient']['nci'];
+            }
+
+            if (!empty($clientData)) {
+                $client->update($clientData);
+            }
+        }
+
+        // Update metadata
+        $compte->update([
+            'metadata' => array_merge($compte->metadata ?? [], [
+                'derniereModification' => now(),
+                'version' => ($compte->metadata['version'] ?? 1) + 1,
+            ])
+        ]);
+
+        return $this->successResponse(new CompteResource($compte->fresh()), 'Compte mis à jour avec succès');
     }
 
     /**
