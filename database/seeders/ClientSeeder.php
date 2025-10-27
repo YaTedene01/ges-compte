@@ -19,13 +19,11 @@ class ClientSeeder extends Seeder
          // Create specific example
          Client::create([
              'id' => '550e8400-e29b-41d4-a716-446655440000',
-             'numeroCompte' => 'C00123456',
              'titulaire' => 'Amadou Diallo Junior',
-             'type' => 'epargne',
-             'solde' => 1250000.00,
-             'devise' => 'FCFA',
-             'dateCreation' => '2023-03-15 00:00:00',
-             'statut' => 'bloque',
+             'nci' => '1234567890123',
+             'email' => 'amadou.diallo@example.com',
+             'telephone' => '+221771234567',
+             'adresse' => 'Dakar, Sénégal',
          ]);
      }
 }

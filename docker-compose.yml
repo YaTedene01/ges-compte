@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8000:80"
+      - "8001:80"
     volumes:
       - .:/var/www/html
     environment:
@@ -28,7 +28,7 @@ services:
       POSTGRES_USER: yateddene
       POSTGRES_PASSWORD: faye0000
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
