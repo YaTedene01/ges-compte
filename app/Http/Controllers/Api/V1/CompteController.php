@@ -17,33 +17,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
+/**
+ * @OA\Info(
+ *     title="API de Gestion de Comptes",
+ *     version="1.0.0",
+ *     description="API pour la gestion des comptes bancaires"
+ * )
+ *
+ * @OA\Schema(
+ *     schema="Compte",
+ *     type="object",
+ *     @OA\Property(property="id", type="string"),
+ *     @OA\Property(property="numeroCompte", type="string"),
+ *     @OA\Property(property="titulaire", type="string"),
+ *     @OA\Property(property="type", type="string"),
+ *     @OA\Property(property="solde", type="number"),
+ *     @OA\Property(property="devise", type="string"),
+ *     @OA\Property(property="dateCreation", type="string", format="date"),
+ *     @OA\Property(property="statut", type="string"),
+ *     @OA\Property(property="motifBlocage", type="string"),
+ *     @OA\Property(property="dateFermeture", type="string", format="date-time"),
+ *     @OA\Property(property="metadata", type="object")
+ * )
+ */
+
 class CompteController extends Controller
 {
-     use ApiResponseTrait;
-
-     /**
-      * @OA\Info(
-      *     title="API de Gestion de Comptes",
-      *     version="1.0.0",
-      *     description="API pour la gestion des comptes bancaires"
-      * )
-      *
-      * @OA\Schema(
-      *     schema="Compte",
-      *     type="object",
-      *     @OA\Property(property="id", type="string"),
-      *     @OA\Property(property="numeroCompte", type="string"),
-      *     @OA\Property(property="titulaire", type="string"),
-      *     @OA\Property(property="type", type="string"),
-      *     @OA\Property(property="solde", type="number"),
-      *     @OA\Property(property="devise", type="string"),
-      *     @OA\Property(property="dateCreation", type="string", format="date"),
-      *     @OA\Property(property="statut", type="string"),
-      *     @OA\Property(property="motifBlocage", type="string"),
-      *     @OA\Property(property="dateFermeture", type="string", format="date-time"),
-      *     @OA\Property(property="metadata", type="object")
-      * )
-      */
+      use ApiResponseTrait;
 
       /**
       * @OA\Get(
