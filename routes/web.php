@@ -19,11 +19,6 @@ Route::get('/', function () {
 
 // Swagger documentation route
 Route::get('/docs', function () {
-    return redirect('/api/v1/documentation');
-});
-
-// Alternative documentation route
-Route::get('/api/v1/documentation', function () {
     $documentation = 'default';
     $urlToDocs = route('l5-swagger.'.$documentation.'.docs');
     $configUrl = config('l5-swagger.defaults.additional_config_url');
