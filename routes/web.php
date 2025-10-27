@@ -19,8 +19,19 @@ Route::get('/', function () {
 
 // Swagger documentation route
 Route::get('/docs', function () {
-    return view('vendor.l5-swagger.index', [
-        'documentation' => 'default',
-        'secure' => false
-    ]);
+    $documentation = 'default';
+    $urlToDocs = route('l5-swagger.'.$documentation.'.docs');
+    $configUrl = config('l5-swagger.defaults.additional_config_url');
+    $validatorUrl = config('l5-swagger.defaults.validator_url');
+    $operationsSorter = config('l5-swagger.defaults.operations_sort');
+    $useAbsolutePath = config('l5-swagger.documentations.'.$documentation.'.paths.use_absolute_path', false);
+
+    return view('vendor.l5-swagger.index', compact(
+        'documentation',
+        'urlToDocs',
+        'configUrl',
+        'validatorUrl',
+        'operationsSorter',
+        'useAbsolutePath'
+    ));
 });
