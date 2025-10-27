@@ -28,7 +28,7 @@ return [
                /*
                 * Absolute URL to the swagger ui assets
                 */
-               'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', null),
+               'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/'),
 
                 /*
                  * File name of the generated json documentation file
@@ -242,7 +242,7 @@ return [
           * Set this to `true` in development mode so that docs would be regenerated on each request
           * Set this to `false` to disable swagger generation on production
           */
-         'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', true),
+         'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
 
         /*
          * Set this to `true` to generate a copy of documentation in yaml format

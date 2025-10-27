@@ -16,5 +16,8 @@ php artisan config:clear
 php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force
 php artisan l5-swagger:generate
 
+# Clear config cache again after generating docs
+php artisan config:clear
+
 # Start Apache
 apache2-foreground
