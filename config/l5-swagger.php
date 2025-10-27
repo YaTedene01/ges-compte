@@ -12,7 +12,7 @@ return [
                 /*
                  * Route for accessing api documentation interface
                  */
-                'api' => 'api/v1/faye-yatedene/documentation',
+                'api' => 'api/v1/documentation',
             ],
             'paths' => [
                 /*
@@ -91,7 +91,7 @@ return [
             /*
              * Edit to set the api's base path
              */
-            'base' => env('L5_SWAGGER_BASE_PATH', '/api/v1/faye-yatedene'),
+            'base' => env('L5_SWAGGER_BASE_PATH', '/api/v1'),
 
             /*
              * Absolute path to directories that should be excluded from scanning

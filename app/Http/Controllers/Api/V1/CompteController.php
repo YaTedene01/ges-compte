@@ -22,7 +22,11 @@ use Illuminate\Validation\Rule;
  * @OA\Info(
  *     title="Bank Account Management API",
  *     version="1.0.0",
- *     description="API for managing bank accounts"
+ *     description="API for managing bank accounts",
+ *     @OA\Contact(
+ *         name="Faye Yatedene",
+ *         email="faye.yatedene@example.com"
+ *     )
  * )
  *
  * @OA\Server(
