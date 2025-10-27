@@ -12,7 +12,7 @@ return [
                 /*
                  * Route for accessing api documentation interface
                  */
-                'api' => 'docs',
+                'api' => 'api/documentation',
             ],
             'paths' => [
                 /*
@@ -21,19 +21,19 @@ return [
                 'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
 
                 /*
-                * Edit to set path where swagger ui assets should be stored
-                */
-               'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
+                 * Edit to set path where swagger ui assets should be stored
+                 */
+                'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
 
-               /*
-                * Absolute URL to the swagger ui assets
-                */
-               'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/'),
+                /*
+                 * Absolute URL to the swagger ui assets
+                 */
+                'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', null),
 
                 /*
                  * File name of the generated json documentation file
                  */
-                'docs_json' => 'swagger.json',
+                'docs_json' => 'api-docs.json',
 
                 /*
                  * File name of the generated YAML documentation file
@@ -96,7 +96,7 @@ return [
             /*
              * Edit to set the api's base path
              */
-            'base' => env('L5_SWAGGER_BASE_PATH', '/api/v1'),
+            'base' => env('L5_SWAGGER_BASE_PATH', null),
 
             /*
              * Absolute path to directories that should be excluded from scanning
@@ -239,10 +239,10 @@ return [
         ],
 
         /*
-          * Set this to `true` in development mode so that docs would be regenerated on each request
-          * Set this to `false` to disable swagger generation on production
-          */
-         'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
+         * Set this to `true` in development mode so that docs would be regenerated on each request
+         * Set this to `false` to disable swagger generation on production
+         */
+        'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
 
         /*
          * Set this to `true` to generate a copy of documentation in yaml format
