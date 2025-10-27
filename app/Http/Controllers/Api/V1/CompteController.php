@@ -20,25 +20,157 @@ use Illuminate\Validation\Rule;
 
 /**
  * @OA\Info(
- *     title="API de Gestion de Comptes",
+ *     title="Bank Account Management API",
  *     version="1.0.0",
- *     description="API pour la gestion des comptes bancaires"
+ *     description="API for managing bank accounts"
+ * )
+ *
+ * @OA\Server(
+ *     url="https://api.banque.example.com/api/v1",
+ *     description="Production server"
+ * )
+ *
+ * @OA\Server(
+ *     url="http://localhost:8000/api/v1",
+ *     description="Development server"
+ * )
+ *
+ * @OA\SecurityScheme(
+ *     securityScheme="bearerAuth",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT",
+ *     description="JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'"
+ * )
+ *
+ * @OA\Tag(
+ *     name="Authentication",
+ *     description="User authentication endpoints"
+ * )
+ *
+ * @OA\Tag(
+ *     name="Accounts",
+ *     description="Bank account management endpoints"
+ * )
+ *
+ * @OA\ExternalDocumentation(
+ *     description="JWT Token Specifications",
+ *     url="https://tools.ietf.org/html/rfc7519"
+ * )
+ *
+ * @OA\ExternalDocumentation(
+ *     description="OAuth 2.0 Protocol",
+ *     url="https://tools.ietf.org/html/rfc6749"
+ * )
+ *
+ * @OA\ExternalDocumentation(
+ *     description="CORS Specifications",
+ *     url="https://fetch.spec.whatwg.org/#cors-protocol"
+ * )
+ *
+ * @OA\ExternalDocumentation(
+ *     description="Rate Limiting Best Practices",
+ *     url="https://tools.ietf.org/html/rfc6585"
  * )
  *
  * @OA\Schema(
- *     schema="Compte",
+ *     schema="Account",
  *     type="object",
- *     @OA\Property(property="id", type="string"),
- *     @OA\Property(property="numeroCompte", type="string"),
- *     @OA\Property(property="titulaire", type="string"),
- *     @OA\Property(property="type", type="string"),
- *     @OA\Property(property="solde", type="number"),
- *     @OA\Property(property="devise", type="string"),
- *     @OA\Property(property="dateCreation", type="string", format="date"),
- *     @OA\Property(property="statut", type="string"),
- *     @OA\Property(property="motifBlocage", type="string"),
- *     @OA\Property(property="dateFermeture", type="string", format="date-time"),
- *     @OA\Property(property="metadata", type="object")
+ *     @OA\Property(property="id", type="string", example="uuid-string"),
+ *     @OA\Property(property="numeroCompte", type="string", example="ACC001234567"),
+ *     @OA\Property(property="titulaire", type="string", example="John Doe"),
+ *     @OA\Property(property="type", type="string", enum={"cheque", "epargne"}, example="cheque"),
+ *     @OA\Property(property="solde", type="number", example=500000),
+ *     @OA\Property(property="devise", type="string", example="FCFA"),
+ *     @OA\Property(property="dateCreation", type="string", format="date", example="2025-01-15"),
+ *     @OA\Property(property="statut", type="string", enum={"actif", "bloque", "ferme"}, example="actif"),
+ *     @OA\Property(property="motifBlocage", type="string", nullable=true, example="Suspicious activity"),
+ *     @OA\Property(property="dateFermeture", type="string", format="date-time", nullable=true, example="2025-10-27T18:00:00Z"),
+ *     @OA\Property(property="metadata", type="object", example={"derniereModification": "2025-10-27T18:00:00Z", "version": 1})
+ * )
+ *
+ * @OA\Schema(
+ *     schema="LoginRequest",
+ *     type="object",
+ *     required={"email", "password"},
+ *     @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+ *     @OA\Property(property="password", type="string", example="password123")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="AuthResponse",
+ *     type="object",
+ *     @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."),
+ *     @OA\Property(property="token_type", type="string", example="Bearer"),
+ *     @OA\Property(property="expires_in", type="integer", example=3600)
+ * )
+ *
+ * @OA\Schema(
+ *     schema="ErrorResponse",
+ *     type="object",
+ *     @OA\Property(property="success", type="boolean", example=false),
+ *     @OA\Property(property="error", type="object",
+ *         @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
+ *         @OA\Property(property="message", type="string", example="Validation failed"),
+ *         @OA\Property(property="details", type="object", example={"field": "error message"}),
+ *         @OA\Property(property="timestamp", type="string", format="date-time", example="2025-10-27T18:00:00Z"),
+ *         @OA\Property(property="path", type="string", example="/api/v1/accounts"),
+ *         @OA\Property(property="traceId", type="string", example="abc-def-ghi-123")
+ *     )
+ * )
+ *
+ * @OA\Parameter(
+ *     parameter="AuthorizationHeader",
+ *     name="Authorization",
+ *     in="header",
+ *     required=true,
+ *     description="JWT access token",
+ *     @OA\Schema(type="string", example="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...")
+ * )
+ *
+ * @OA\Parameter(
+ *     parameter="ContentTypeHeader",
+ *     name="Content-Type",
+ *     in="header",
+ *     required=true,
+ *     description="Content type",
+ *     @OA\Schema(type="string", example="application/json")
+ * )
+ *
+ * @OA\Parameter(
+ *     parameter="AcceptHeader",
+ *     name="Accept",
+ *     in="header",
+ *     required=true,
+ *     description="Accept header",
+ *     @OA\Schema(type="string", example="application/json")
+ * )
+ *
+ * @OA\Parameter(
+ *     parameter="AcceptLanguageHeader",
+ *     name="Accept-Language",
+ *     in="header",
+ *     required=false,
+ *     description="Language preference",
+ *     @OA\Schema(type="string", example="fr-FR")
+ * )
+ *
+ * @OA\Parameter(
+ *     parameter="RequestIdHeader",
+ *     name="X-Request-ID",
+ *     in="header",
+ *     required=false,
+ *     description="Unique request identifier",
+ *     @OA\Schema(type="string", example="unique-request-id")
+ * )
+ *
+ * @OA\Parameter(
+ *     parameter="ApiVersionHeader",
+ *     name="X-API-Version",
+ *     in="header",
+ *     required=false,
+ *     description="API version",
+ *     @OA\Schema(type="string", example="v1")
  * )
  */
 
@@ -48,58 +180,59 @@ class CompteController extends Controller
 
       /**
       * @OA\Get(
-      *     path="/v1/faye-yatedene/comptes",
-      *     summary="Liste des comptes",
-      *     description="Récupère la liste des comptes avec filtres et pagination",
-      *     tags={"Comptes"},
+      *     path="/v1/accounts",
+      *     summary="List accounts",
+      *     description="Retrieve a list of accounts with filters and pagination",
+      *     tags={"Accounts"},
+      *     security={{"bearerAuth": {}}},
       *     @OA\Parameter(
       *         name="type",
       *         in="query",
-      *         description="Type de compte",
+      *         description="Account type",
       *         required=false,
       *         @OA\Schema(type="string")
       *     ),
       *     @OA\Parameter(
       *         name="statut",
       *         in="query",
-      *         description="Statut du compte",
+      *         description="Account status",
       *         required=false,
       *         @OA\Schema(type="string")
       *     ),
       *     @OA\Parameter(
       *         name="search",
       *         in="query",
-      *         description="Recherche par titulaire ou numéro",
+      *         description="Search by holder name or account number",
       *         required=false,
       *         @OA\Schema(type="string")
       *     ),
       *     @OA\Parameter(
       *         name="sort",
       *         in="query",
-      *         description="Champ de tri",
+      *         description="Sort field",
       *         required=false,
       *         @OA\Schema(type="string", default="dateCreation")
       *     ),
       *     @OA\Parameter(
       *         name="order",
       *         in="query",
-      *         description="Ordre de tri",
+      *         description="Sort order",
       *         required=false,
       *         @OA\Schema(type="string", enum={"asc", "desc"}, default="desc")
       *     ),
       *     @OA\Parameter(
       *         name="limit",
       *         in="query",
-      *         description="Nombre d'éléments par page",
+      *         description="Items per page",
       *         required=false,
       *         @OA\Schema(type="integer", default=10, maximum=100)
       *     ),
       *     @OA\Response(
       *         response=200,
-      *         description="Liste des comptes",
+      *         description="List of accounts",
       *         @OA\JsonContent(
       *             @OA\Property(property="success", type="boolean", example=true),
-      *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Compte")),
+      *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Account")),
       *             @OA\Property(property="pagination", type="object",
       *                 @OA\Property(property="currentPage", type="integer"),
       *                 @OA\Property(property="totalPages", type="integer"),
@@ -110,6 +243,16 @@ class CompteController extends Controller
       *             ),
       *             @OA\Property(property="links", type="object")
       *         )
+      *     ),
+      *     @OA\Response(
+      *         response=401,
+      *         description="Unauthorized",
+      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+      *     ),
+      *     @OA\Response(
+      *         response=429,
+      *         description="Too many requests",
+      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
       *     )
       * )
       */
@@ -146,10 +289,11 @@ class CompteController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/v1/faye-yatedene/comptes",
-     *     summary="Créer un nouveau compte",
-     *     description="Crée un nouveau compte bancaire avec vérification du client",
-     *     tags={"Comptes"},
+     *     path="/v1/accounts",
+     *     summary="Create a new account",
+     *     description="Create a new bank account with client verification",
+     *     tags={"Accounts"},
+     *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -163,30 +307,38 @@ class CompteController extends Controller
      *                 @OA\Property(property="nci", type="string", example="1234567890123", nullable=true),
      *                 @OA\Property(property="email", type="string", format="email", example="cheikh.sy@example.com"),
      *                 @OA\Property(property="telephone", type="string", example="+221771234567"),
-     *                 @OA\Property(property="adresse", type="string", example="Dakar, Sénégal")
+     *                 @OA\Property(property="adresse", type="string", example="Dakar, Senegal")
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Compte créé avec succès",
+     *         description="Account created successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Compte créé avec succès"),
-     *             @OA\Property(property="data", ref="#/components/schemas/Compte")
+     *             @OA\Property(property="message", type="string", example="Account created successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Account")
      *         )
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Données invalides",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="error", type="object",
-     *                 @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
-     *                 @OA\Property(property="message", type="string", example="Les données fournies sont invalides"),
-     *                 @OA\Property(property="details", type="object")
-     *             )
-     *         )
+     *         description="Invalid data",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Too many requests",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     )
      * )
      */
@@ -230,36 +382,40 @@ class CompteController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/v1/faye-yatedene/comptes/{compteId}",
-     *     summary="Récupérer un compte spécifique",
-     *     description="Récupère les détails d'un compte spécifique par son ID",
-     *     tags={"Comptes"},
+     *     path="/v1/accounts/{numero}",
+     *     summary="Get specific account",
+     *     description="Retrieve details of a specific account by its number",
+     *     tags={"Accounts"},
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
-     *         name="compteId",
+     *         name="numero",
      *         in="path",
-     *         description="ID du compte",
+     *         description="Account number",
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Détails du compte",
+     *         description="Account details",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="data", ref="#/components/schemas/Compte")
+     *             @OA\Property(property="data", ref="#/components/schemas/Account")
      *         )
      *     ),
      *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=404,
-     *         description="Compte non trouvé",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="error", type="object",
-     *                 @OA\Property(property="code", type="string", example="COMPTE_NOT_FOUND"),
-     *                 @OA\Property(property="message", type="string", example="Le compte avec l'ID spécifié n'existe pas"),
-     *                 @OA\Property(property="details", type="object")
-     *             )
-     *         )
+     *         description="Account not found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Too many requests",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     )
      * )
      */
@@ -276,14 +432,15 @@ class CompteController extends Controller
 
     /**
      * @OA\Patch(
-     *     path="/v1/faye-yatedene/comptes/{numero}",
-     *     summary="Mettre à jour un compte",
-     *     description="Met à jour les informations du compte et du client associé",
-     *     tags={"Comptes"},
+     *     path="/v1/accounts/{numero}",
+     *     summary="Update account",
+     *     description="Update account and associated client information",
+     *     tags={"Accounts"},
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
-     *         description="Numéro du compte",
+     *         description="Account number",
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
@@ -301,35 +458,32 @@ class CompteController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Compte mis à jour avec succès",
+     *         description="Account updated successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Compte mis à jour avec succès"),
-     *             @OA\Property(property="data", ref="#/components/schemas/Compte")
+     *             @OA\Property(property="message", type="string", example="Account updated successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Account")
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Compte non trouvé",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="error", type="object",
-     *                 @OA\Property(property="code", type="string", example="COMPTE_NOT_FOUND"),
-     *                 @OA\Property(property="message", type="string", example="Le compte avec le numéro spécifié n'existe pas")
-     *             )
-     *         )
+     *         description="Account not found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Données invalides",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="error", type="object",
-     *                 @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
-     *                 @OA\Property(property="message", type="string", example="Les données fournies sont invalides"),
-     *                 @OA\Property(property="details", type="object")
-     *             )
-     *         )
+     *         description="Validation error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Too many requests",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     )
      * )
      */
@@ -428,36 +582,41 @@ class CompteController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/v1/faye-yatedene/comptes/{numero}",
-     *     summary="Supprimer un compte",
-     *     description="Supprime un compte spécifique avec soft delete, change son statut à 'ferme' et supprime ses transactions",
-     *     tags={"Comptes"},
+     *     path="/v1/accounts/{numero}",
+     *     summary="Delete account",
+     *     description="Soft delete an account, change status to 'ferme' and delete associated transactions",
+     *     tags={"Accounts"},
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
-     *         description="Numéro du compte",
+     *         description="Account number",
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Compte supprimé avec succès",
+     *         description="Account deleted successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Compte supprimé avec succès"),
-     *             @OA\Property(property="data", ref="#/components/schemas/Compte")
+     *             @OA\Property(property="message", type="string", example="Account deleted successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Account")
      *         )
      *     ),
      *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
      *         response=404,
-     *         description="Compte non trouvé",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="error", type="object",
-     *                 @OA\Property(property="code", type="string", example="COMPTE_NOT_FOUND"),
-     *                 @OA\Property(property="message", type="string", example="Le compte avec le numéro spécifié n'existe pas")
-     *             )
-     *         )
+     *         description="Account not found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Too many requests",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     )
      * )
      */
@@ -486,15 +645,16 @@ class CompteController extends Controller
     }
 
     /**
-     * @OA\Post(
-     *     path="/v1/faye-yatedene/comptes/{numero}/bloquer",
-     *     summary="Bloquer un compte",
-     *     description="Bloque un compte épargne si actif, calcule les dates de blocage",
-     *     tags={"Comptes"},
+     * @OA\Patch(
+     *     path="/v1/accounts/{numero}/block",
+     *     summary="Block account",
+     *     description="Block an active account and calculate blocking dates",
+     *     tags={"Accounts"},
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
-     *         description="Numéro du compte",
+     *         description="Account number",
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
@@ -502,17 +662,17 @@ class CompteController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"motif", "duree", "unite"},
-     *             @OA\Property(property="motif", type="string", example="Activité suspecte détectée"),
+     *             @OA\Property(property="motif", type="string", example="Suspicious activity detected"),
      *             @OA\Property(property="duree", type="integer", minimum=1, example=30),
      *             @OA\Property(property="unite", type="string", enum={"jours", "mois", "annees"}, example="mois")
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Compte bloqué avec succès",
+     *         description="Account blocked successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Compte bloqué avec succès"),
+     *             @OA\Property(property="message", type="string", example="Account blocked successfully"),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="id", type="string"),
      *                 @OA\Property(property="statut", type="string", example="bloque"),
@@ -524,14 +684,28 @@ class CompteController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Compte non actif ou données invalides",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="error", type="object",
-     *                 @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
-     *                 @OA\Property(property="message", type="string", example="Le compte doit être actif pour être bloqué")
-     *             )
-     *         )
+     *         description="Account not active or invalid data",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Account not found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Too many requests",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     )
      * )
      */
@@ -567,15 +741,16 @@ class CompteController extends Controller
     }
 
     /**
-     * @OA\Post(
-     *     path="/v1/faye-yatedene/comptes/{numero}/debloquer",
-     *     summary="Débloquer un compte",
-     *     description="Débloque un compte bloqué",
-     *     tags={"Comptes"},
+     * @OA\Patch(
+     *     path="/v1/accounts/{numero}/unblock",
+     *     summary="Unblock account",
+     *     description="Unblock a blocked account",
+     *     tags={"Accounts"},
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
-     *         description="Numéro du compte",
+     *         description="Account number",
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
@@ -583,15 +758,15 @@ class CompteController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"motif"},
-     *             @OA\Property(property="motif", type="string", example="Vérification complétée")
+     *             @OA\Property(property="motif", type="string", example="Verification completed")
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Compte débloqué avec succès",
+     *         description="Account unblocked successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Compte débloqué avec succès"),
+     *             @OA\Property(property="message", type="string", example="Account unblocked successfully"),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="id", type="string"),
      *                 @OA\Property(property="statut", type="string", example="actif"),
@@ -601,14 +776,28 @@ class CompteController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Compte non bloqué",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="error", type="object",
-     *                 @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
-     *                 @OA\Property(property="message", type="string", example="Le compte n'est pas bloqué")
-     *             )
-     *         )
+     *         description="Account not blocked",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Account not found",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Too many requests",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
      *     )
      * )
      */

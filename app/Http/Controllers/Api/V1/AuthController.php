@@ -11,8 +11,63 @@ use Laravel\Passport\Client;
 use Laravel\Passport\Token;
 use Nyholm\Psr7\Factory\Psr17Factory;
 
+/**
+ * @OA\Info(
+ *     title="API d'Authentification",
+ *     version="1.0.0",
+ *     description="API pour l'authentification des utilisateurs"
+ * )
+ *
+ * @OA\Schema(
+ *     schema="LoginRequest",
+ *     type="object",
+ *     required={"email", "password"},
+ *     @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+ *     @OA\Property(property="password", type="string", example="password123")
+ * )
+ *
+ * @OA\Schema(
+ *     schema="AuthResponse",
+ *     type="object",
+ *     @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."),
+ *     @OA\Property(property="token_type", type="string", example="Bearer"),
+ *     @OA\Property(property="expires_in", type="integer", example=3600)
+ * )
+ */
+
 class AuthController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/v1/authentication/login",
+     *     summary="User login",
+     *     description="Authenticates a user and returns an access token",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/LoginRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login successful",
+     *         @OA\JsonContent(ref="#/components/schemas/AuthResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Invalid credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="UNAUTHORIZED"),
+     *                 @OA\Property(property="message", type="string", example="Invalid credentials"),
+     *                 @OA\Property(property="timestamp", type="string", format="date-time"),
+     *                 @OA\Property(property="path", type="string"),
+     *                 @OA\Property(property="traceId", type="string")
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -53,6 +108,33 @@ class AuthController extends Controller
         return response()->json($data)->withCookie($cookie);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/v1/authentication/refresh",
+     *     summary="Refresh access token",
+     *     description="Generates a new access token using the refresh token",
+     *     tags={"Authentication"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Token refreshed successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/AuthResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Missing or invalid refresh token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="UNAUTHORIZED"),
+     *                 @OA\Property(property="message", type="string", example="No refresh token"),
+     *                 @OA\Property(property="timestamp", type="string", format="date-time"),
+     *                 @OA\Property(property="path", type="string"),
+     *                 @OA\Property(property="traceId", type="string")
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function refresh(Request $request)
     {
         $refreshToken = $request->cookie('refresh_token');
@@ -75,6 +157,37 @@ class AuthController extends Controller
                          ->withCookie($cookie);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/v1/authentication/logout",
+     *     summary="User logout",
+     *     description="Revokes the current user's access token",
+     *     tags={"Authentication"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Logout successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Logged out")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Invalid token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="UNAUTHORIZED"),
+     *                 @OA\Property(property="message", type="string", example="Unauthorized"),
+     *                 @OA\Property(property="timestamp", type="string", format="date-time"),
+     *                 @OA\Property(property="path", type="string"),
+     *                 @OA\Property(property="traceId", type="string")
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
