@@ -44,6 +44,9 @@ class Compte extends Model
         static::addGlobalScope(new NonDeletedScope);
 
         static::creating(function ($compte) {
+            if (empty($compte->id)) {
+                $compte->id = Str::uuid();
+            }
             if (!$compte->numeroCompte) {
                 do {
                     $numero = 'C' . str_pad(rand(1, 99999999), 8, '0', STR_PAD_LEFT);
@@ -60,7 +63,7 @@ class Compte extends Model
 
     public function transactions()
     {
-         return $this->hasMany(Transaction::class);
+         return $this->hasMany(Transaction::class, 'compteId');
     }
 
     public function scopeNumero($query, $numero)

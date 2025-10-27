@@ -13,13 +13,7 @@ return new class extends Migration
     {
          Schema::create('clients', function (Blueprint $table) {
              $table->uuid('id')->primary();
-             $table->string('numeroCompte')->unique();
              $table->string('titulaire');
-             $table->string('type');
-             $table->decimal('solde', 15, 2);
-             $table->string('devise');
-             $table->timestamp('dateCreation');
-             $table->string('statut');
              $table->string('nci')->nullable();
              $table->string('email')->nullable();
              $table->string('telephone')->nullable();
@@ -29,9 +23,8 @@ return new class extends Migration
              $table->timestamps();
 
              // Indexes
-             $table->index('numeroCompte');
-             $table->index('type');
-             $table->index('statut');
+             $table->index('email');
+             $table->index('telephone');
          });
      }
 

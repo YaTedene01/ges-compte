@@ -23,7 +23,7 @@ class CompteBloquerRequest extends FormRequest
     {
         return [
             'motifBlocage' => 'required|string',
-            'dateDebutBlocage' => 'required|date|after:now',
+            'dateDebutBlocage' => 'required|date|after_or_equal:now',
             'dateFinBlocage' => 'required|date|after:dateDebutBlocage',
         ];
     }

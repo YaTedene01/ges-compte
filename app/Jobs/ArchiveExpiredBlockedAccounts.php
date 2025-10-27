@@ -35,8 +35,8 @@ class ArchiveExpiredBlockedAccounts implements ShouldQueue
             // Archive the account
             $compte->update(['statut' => 'ferme']);
 
-            // Archive all transactions
-            Transaction::where('compte_id', $compte->id)->update(['deleted_at' => now()]);
+            // Archive all transactions (soft delete)
+            Transaction::where('compteId', $compte->id)->delete();
         }
     }
 }

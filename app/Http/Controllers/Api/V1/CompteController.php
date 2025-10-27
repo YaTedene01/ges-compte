@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Compte;
 use App\Models\Client;
+use App\Models\Transaction;
 use App\Http\Resources\CompteResource;
 use App\Traits\ApiResponseTrait;
 use App\Http\Requests\CompteCreationRequest;
@@ -276,19 +277,62 @@ class CompteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/v1/faye-yatedene/comptes/{numero}",
+     *     summary="Archiver un compte",
+     *     description="Archive un compte spécifique en changeant son statut à 'ferme' et en supprimant ses transactions",
+     *     tags={"Comptes"},
+     *     @OA\Parameter(
+     *         name="numero",
+     *         in="path",
+     *         description="Numéro du compte",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Compte archivé avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Compte archivé avec succès")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Compte non trouvé",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="COMPTE_NOT_FOUND"),
+     *                 @OA\Property(property="message", type="string", example="Le compte avec le numéro spécifié n'existe pas")
+     *             )
+     *         )
+     *     )
+     * )
      */
-    public function destroy(string $id)
+    public function destroy(string $numero)
     {
-        //
+        try {
+            $compte = Compte::where('numeroCompte', $numero)->firstOrFail();
+
+            // Archive the account
+            $compte->update(['statut' => 'ferme']);
+
+            // Archive all transactions (soft delete)
+            Transaction::where('compteId', $compte->id)->delete();
+
+            return $this->successResponse(null, 'Compte archivé avec succès');
+        } catch (\Exception $e) {
+            return $this->errorResponse('Erreur lors de l\'archivage du compte: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
      * Bloquer un compte.
      */
-    public function bloquer(CompteBloquerRequest $request, string $compteId)
+    public function bloquer(CompteBloquerRequest $request, string $numero)
     {
-        $compte = Compte::where('numeroCompte', $compteId)->firstOrFail();
+        $compte = Compte::where('numeroCompte', $numero)->firstOrFail();
 
         $compte->update([
             'statut' => 'bloque',

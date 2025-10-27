@@ -16,15 +16,13 @@ class ClientFactory extends Factory
      */
     public function definition(): array
     {
-         return [
-             'id' => $this->faker->uuid(),
-             'numeroCompte' => $this->faker->unique()->regexify('C[0-9]{8}'),
-             'titulaire' => $this->faker->name(),
-             'type' => 'epargne',
-             'solde' => $this->faker->numberBetween(100000, 10000000),
-             'devise' => 'FCFA',
-             'dateCreation' => $this->faker->dateTimeBetween('-2 years', 'now'),
-             'statut' => $this->faker->randomElement(['actif', 'bloque', 'suspendu']),
-         ];
-     }
+          return [
+              'id' => $this->faker->uuid(),
+              'titulaire' => $this->faker->name(),
+              'nci' => $this->faker->optional()->numerify('#############'),
+              'email' => $this->faker->unique()->safeEmail(),
+              'telephone' => $this->faker->phoneNumber(),
+              'adresse' => $this->faker->address(),
+          ];
+      }
 }

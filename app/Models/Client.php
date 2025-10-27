@@ -42,6 +42,9 @@ class Client extends Model
          static::observe(ClientObserver::class);
 
          static::creating(function ($client) {
+             if (empty($client->id)) {
+                 $client->id = Str::uuid();
+             }
              if (!$client->password) {
                  $client->password = Hash::make(Str::random(8));
              }
