@@ -16,3 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Swagger documentation route
+Route::get('/api/v1/documentation', function () {
+    return view('vendor.l5-swagger.index', [
+        'documentation' => 'default',
+        'secure' => false
+    ]);
+});
