@@ -19,17 +19,18 @@ class CompteFactory extends Factory
     {
          return [
              'id' => $this->faker->uuid(),
+             'numeroCompte' => $this->faker->unique()->regexify('C[0-9]{8}'),
              'titulaire' => $this->faker->name(),
              'type' => $this->faker->randomElement(['epargne', 'cheque']),
-             'solde' => $this->faker->numberBetween(100000, 10000000),
              'devise' => 'FCFA',
              'dateCreation' => $this->faker->date(),
              'statut' => $this->faker->randomElement(['actif', 'bloque', 'ferme']),
+             'motifBlocage' => null,
              'metadata' => [
                  'derniereModification' => $this->faker->dateTime(),
                  'version' => $this->faker->numberBetween(1, 10),
              ],
              'client_id' => Client::factory(),
          ];
-     }
+    }
 }

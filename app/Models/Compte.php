@@ -16,24 +16,28 @@ class Compte extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id',
-        'numeroCompte',
-        'titulaire',
-        'type',
-        'solde',
-        'devise',
-        'dateCreation',
-        'statut',
-        'motifBlocage',
-        'metadata',
-        'client_id',
-    ];
+          'id',
+          'numeroCompte',
+          'titulaire',
+          'type',
+          'devise',
+          'dateCreation',
+          'statut',
+          'motifBlocage',
+          'dateDebutBlocage',
+          'dateFinBlocage',
+          'dateFermeture',
+          'metadata',
+          'client_id',
+      ];
 
     protected $casts = [
-        'solde' => 'decimal:2',
-        'dateCreation' => 'date',
-        'metadata' => 'array',
-    ];
+          'dateCreation' => 'date',
+          'dateDebutBlocage' => 'datetime',
+          'dateFinBlocage' => 'datetime',
+          'dateFermeture' => 'datetime',
+          'metadata' => 'array',
+      ];
 
     protected static function boot()
     {
@@ -42,6 +46,9 @@ class Compte extends Model
         static::addGlobalScope(new NonDeletedScope);
 
         static::creating(function ($compte) {
+            if (empty($compte->id)) {
+                $compte->id = Str::uuid();
+            }
             if (!$compte->numeroCompte) {
                 do {
                     $numero = 'C' . str_pad(rand(1, 99999999), 8, '0', STR_PAD_LEFT);
@@ -53,7 +60,12 @@ class Compte extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class);
+         return $this->belongsTo(Client::class);
+    }
+
+    public function transactions()
+    {
+         return $this->hasMany(Transaction::class, 'compteId');
     }
 
     public function scopeNumero($query, $numero)
@@ -63,8 +75,15 @@ class Compte extends Model
 
     public function scopeClient($query, $telephone)
     {
-        return $query->whereHas('client', function ($q) use ($telephone) {
-            $q->where('telephone', $telephone);
-        });
-    }
+         return $query->whereHas('client', function ($q) use ($telephone) {
+             $q->where('telephone', $telephone);
+         });
+     }
+
+    public function getSoldeAttribute()
+    {
+         $deposits = $this->transactions()->where('type', 'depot')->sum('montant');
+         $withdrawals = $this->transactions()->where('type', 'retrait')->sum('montant');
+         return $deposits - $withdrawals;
+     }
 }

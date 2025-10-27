@@ -18,24 +18,31 @@ class CompteSeeder extends Seeder
          Compte::factory(10)->create();
 
          // Create specific example
-         $client = Client::where('numeroCompte', 'C00123456')->first();
+         $client = Client::firstOrCreate([
+             'titulaire' => 'Amadou Diallo Junior',
+             'email' => 'amadou.diallo@example.com',
+             'telephone' => '+221771234567',
+             'adresse' => 'Dakar, Sénégal',
+         ]);
 
-         if ($client) {
-             Compte::create([
-                 'id' => '550e8400-e29b-41d4-a716-446655440000',
+         Compte::updateOrCreate(
+             ['id' => '550e8400-e29b-41d4-a716-446655440000'],
+             [
                  'numeroCompte' => 'C00123456',
                  'titulaire' => 'Amadou Diallo Junior',
                  'type' => 'epargne',
-                 'solde' => 1250000.00,
                  'devise' => 'FCFA',
                  'dateCreation' => '2023-03-15',
                  'statut' => 'bloque',
+                 'motifBlocage' => null,
+                 'dateDebutBlocage' => '2023-03-15 00:00:00',
+                 'dateFinBlocage' => '2025-12-31 23:59:59',
                  'metadata' => [
                      'derniereModification' => '2023-03-15T00:00:00Z',
                      'version' => 1,
                  ],
                  'client_id' => $client->id,
-             ]);
-         }
+             ]
+         );
      }
 }

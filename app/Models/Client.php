@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Observers\ClientObserver;
 
 class Client extends Model
 {
@@ -13,18 +16,41 @@ class Client extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id',
-        'numeroCompte',
-        'titulaire',
-        'type',
-        'solde',
-        'devise',
-        'dateCreation',
-        'statut',
-    ];
+         'id',
+         'titulaire',
+         'nci',
+         'email',
+         'telephone',
+         'adresse',
+         'password',
+         'code',
+     ];
+
+    protected $hidden = [
+         'password',
+         'code',
+     ];
 
     protected $casts = [
-        'solde' => 'decimal:2',
-        'dateCreation' => 'datetime',
-    ];
+         'dateCreation' => 'datetime',
+     ];
+
+    protected static function boot()
+    {
+         parent::boot();
+
+         static::observe(ClientObserver::class);
+
+         static::creating(function ($client) {
+             if (empty($client->id)) {
+                 $client->id = Str::uuid();
+             }
+             if (!$client->password) {
+                 $client->password = Hash::make(Str::random(8));
+             }
+             if (!$client->code) {
+                 $client->code = strtoupper(Str::random(6));
+             }
+         });
+     }
 }
