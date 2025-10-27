@@ -16,26 +16,28 @@ class Compte extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-         'id',
-         'numeroCompte',
-         'titulaire',
-         'type',
-         'devise',
-         'dateCreation',
-         'statut',
-         'motifBlocage',
-         'dateDebutBlocage',
-         'dateFinBlocage',
-         'metadata',
-         'client_id',
-     ];
+          'id',
+          'numeroCompte',
+          'titulaire',
+          'type',
+          'devise',
+          'dateCreation',
+          'statut',
+          'motifBlocage',
+          'dateDebutBlocage',
+          'dateFinBlocage',
+          'dateFermeture',
+          'metadata',
+          'client_id',
+      ];
 
     protected $casts = [
-         'dateCreation' => 'date',
-         'dateDebutBlocage' => 'datetime',
-         'dateFinBlocage' => 'datetime',
-         'metadata' => 'array',
-     ];
+          'dateCreation' => 'date',
+          'dateDebutBlocage' => 'datetime',
+          'dateFinBlocage' => 'datetime',
+          'dateFermeture' => 'datetime',
+          'metadata' => 'array',
+      ];
 
     protected static function boot()
     {

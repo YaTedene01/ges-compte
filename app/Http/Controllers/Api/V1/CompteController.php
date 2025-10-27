@@ -40,6 +40,7 @@ class CompteController extends Controller
       *     @OA\Property(property="dateCreation", type="string", format="date"),
       *     @OA\Property(property="statut", type="string"),
       *     @OA\Property(property="motifBlocage", type="string"),
+      *     @OA\Property(property="dateFermeture", type="string", format="date-time"),
       *     @OA\Property(property="metadata", type="object")
       * )
       */
@@ -427,8 +428,8 @@ class CompteController extends Controller
     /**
      * @OA\Delete(
      *     path="/v1/faye-yatedene/comptes/{numero}",
-     *     summary="Archiver un compte",
-     *     description="Archive un compte spécifique en changeant son statut à 'ferme' et en supprimant ses transactions",
+     *     summary="Supprimer un compte",
+     *     description="Supprime un compte spécifique avec soft delete, change son statut à 'ferme' et supprime ses transactions",
      *     tags={"Comptes"},
      *     @OA\Parameter(
      *         name="numero",
@@ -439,10 +440,11 @@ class CompteController extends Controller
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Compte archivé avec succès",
+     *         description="Compte supprimé avec succès",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Compte archivé avec succès")
+     *             @OA\Property(property="message", type="string", example="Compte supprimé avec succès"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Compte")
      *         )
      *     ),
      *     @OA\Response(
@@ -463,15 +465,22 @@ class CompteController extends Controller
         try {
             $compte = Compte::where('numeroCompte', $numero)->firstOrFail();
 
-            // Archive the account
-            $compte->update(['statut' => 'ferme']);
+            // Update status and dateFermeture before soft delete
+            $compte->update([
+                'statut' => 'ferme',
+                'dateFermeture' => now()
+            ]);
 
-            // Archive all transactions (soft delete)
+            // Soft delete all transactions
             Transaction::where('compteId', $compte->id)->delete();
 
-            return $this->successResponse(null, 'Compte archivé avec succès');
+            // Soft delete the account
+            $compte->delete();
+
+            // Return the account data before deletion for the response
+            return $this->successResponse(new CompteResource($compte), 'Compte supprimé avec succès');
         } catch (\Exception $e) {
-            return $this->errorResponse('Erreur lors de l\'archivage du compte: ' . $e->getMessage(), 500);
+            return $this->errorResponse('Erreur lors de la suppression du compte: ' . $e->getMessage(), 500);
         }
     }
 

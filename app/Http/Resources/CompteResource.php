@@ -26,6 +26,7 @@ class CompteResource extends JsonResource
              'motifBlocage' => $this->motifBlocage,
              'dateDebutBlocage' => $this->dateDebutBlocage,
              'dateFinBlocage' => $this->dateFinBlocage,
+             'dateFermeture' => $this->dateFermeture,
              'metadata' => $this->metadata,
          ];
      }
