@@ -27,7 +27,8 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            // Disable logging for all exceptions to avoid permission issues
+            return false;
         });
 
         $this->renderable(function (CompteNotFoundException $e, Request $request) {

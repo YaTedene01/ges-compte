@@ -20,7 +20,7 @@ Route::get('/', function () {
 // Swagger documentation route
 Route::get('/docs', function () {
     $documentation = 'default';
-    $urlToDocs = route('l5-swagger.'.$documentation.'.docs');
+    $urlToDocs = '/api/documentation';
     $configUrl = config('l5-swagger.defaults.additional_config_url');
     $validatorUrl = config('l5-swagger.defaults.validator_url');
     $operationsSorter = config('l5-swagger.defaults.operations_sort');
