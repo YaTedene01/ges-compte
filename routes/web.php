@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 // Swagger documentation route
-Route::get('/api/v1/documentation', function () {
+Route::get('/docs', function () {
     return view('vendor.l5-swagger.index', [
         'documentation' => 'default',
         'secure' => false
