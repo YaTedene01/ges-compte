@@ -12,5 +12,9 @@ php artisan migrate --seed
 # Clear config cache
 php artisan config:clear
 
+# Generate Swagger documentation
+php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force
+php artisan l5-swagger:generate
+
 # Start Apache
 apache2-foreground
