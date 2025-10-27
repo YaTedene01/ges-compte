@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: ges-compte-faye-yatedene
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        fromSecret: app-url
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromSecret: db-host
+      - key: DB_PORT
+        fromSecret: db-port
+      - key: DB_DATABASE
+        fromSecret: db-name
+      - key: DB_USERNAME
+        fromSecret: db-username
+      - key: DB_PASSWORD
+        fromSecret: db-password
+      - key: L5_SWAGGER_GENERATE_ALWAYS
+        value: false
+      - key: L5_SWAGGER_USE_ABSOLUTE_PATH
+        value: true
+      - key: L5_SWAGGER_BASE_PATH
+        value: /api/v1
+    secrets:
+      - key: app-url
+        value: https://ges-compte-faye-yatedene.onrender.com
+      - key: db-host
+        value: YOUR_DB_HOST
+      - key: db-port
+        value: YOUR_DB_PORT
+      - key: db-name
+        value: YOUR_DB_NAME
+      - key: db-username
+        value: YOUR_DB_USERNAME
+      - key: db-password
+        value: YOUR_DB_PASSWORD

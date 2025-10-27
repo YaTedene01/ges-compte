@@ -1,5 +1,5 @@
 # Use the official PHP image with Apache
-FROM php:8.3-apache
+FROM php:8.2-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -35,6 +35,14 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Install Node.js dependencies and build assets
 RUN npm install && npm run build
+
+# Download Swagger UI assets
+RUN mkdir -p public/vendor/swagger-api/swagger-ui/dist && \
+    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/swagger-ui-bundle.js -o public/vendor/swagger-api/swagger-ui/dist/swagger-ui-bundle.js && \
+    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/swagger-ui-standalone-preset.js -o public/vendor/swagger-api/swagger-ui/dist/swagger-ui-standalone-preset.js && \
+    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/swagger-ui.css -o public/vendor/swagger-api/swagger-ui/dist/swagger-ui.css && \
+    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/favicon-32x32.png -o public/vendor/swagger-api/swagger-ui/dist/favicon-32x32.png && \
+    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/favicon-16x16.png -o public/vendor/swagger-api/swagger-ui/dist/favicon-16x16.png
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \

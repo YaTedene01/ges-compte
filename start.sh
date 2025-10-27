@@ -16,12 +16,12 @@ php artisan config:clear
 php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force
 php artisan l5-swagger:generate
 
-# Clear config cache again after generating docs
-php artisan config:clear
-
 # Copy Swagger UI assets to public directory
 mkdir -p public/vendor/swagger-api/swagger-ui/dist
 cp -r vendor/swagger-api/swagger-ui/dist/* public/vendor/swagger-api/swagger-ui/dist/ 2>/dev/null || true
+
+# Clear config cache again after generating docs
+php artisan config:clear
 
 # Start Apache
 apache2-foreground
