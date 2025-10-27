@@ -5,40 +5,25 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Response;
 
 class LoggingMiddleware
 {
-     /**
-      * Handle an incoming request.
-      *
-      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-      */
-     public function handle(Request $request, Closure $next): Response
-     {
-         $startTime = now();
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        $response = $next($request);
 
-         Log::info('Operation started', [
-             'method' => $request->method(),
-             'url' => $request->fullUrl(),
-             'host' => $request->getHost(),
-             'user_agent' => $request->userAgent(),
-             'ip' => $request->ip(),
-             'start_time' => $startTime,
-         ]);
+        Log::info('API Operation', [
+            'user_id' => auth('api')->id(),
+            'method' => $request->method(),
+            'url' => $request->fullUrl(),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'status' => $response->status(),
+        ]);
 
-         $response = $next($request);
-
-         $endTime = now();
-
-         Log::info('Operation completed', [
-             'method' => $request->method(),
-             'url' => $request->fullUrl(),
-             'status' => $response->getStatusCode(),
-             'duration' => $endTime->diffInMilliseconds($startTime),
-             'end_time' => $endTime,
-         ]);
-
-         return $response;
-     }
+        return $response;
+    }
 }
