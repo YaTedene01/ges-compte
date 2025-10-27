@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CompteBloquerRequest extends FormRequest
+class CompteDebloquerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,6 @@ class CompteBloquerRequest extends FormRequest
     {
         return [
             'motif' => 'required|string',
-            'duree' => 'required|integer|min:1',
-            'unite' => 'required|string|in:jours,mois,annees',
         ];
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Resources\CompteResource;
 use App\Traits\ApiResponseTrait;
 use App\Http\Requests\CompteCreationRequest;
 use App\Http\Requests\CompteBloquerRequest;
+use App\Http\Requests\CompteDebloquerRequest;
 use App\Http\Requests\CompteUpdateRequest;
 use App\Exceptions\CompteNotFoundException;
 use App\Rules\SenegalesePhoneNumber;
@@ -485,19 +486,151 @@ class CompteController extends Controller
     }
 
     /**
-     * Bloquer un compte.
+     * @OA\Post(
+     *     path="/v1/faye-yatedene/comptes/{numero}/bloquer",
+     *     summary="Bloquer un compte",
+     *     description="Bloque un compte épargne si actif, calcule les dates de blocage",
+     *     tags={"Comptes"},
+     *     @OA\Parameter(
+     *         name="numero",
+     *         in="path",
+     *         description="Numéro du compte",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"motif", "duree", "unite"},
+     *             @OA\Property(property="motif", type="string", example="Activité suspecte détectée"),
+     *             @OA\Property(property="duree", type="integer", minimum=1, example=30),
+     *             @OA\Property(property="unite", type="string", enum={"jours", "mois", "annees"}, example="mois")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Compte bloqué avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Compte bloqué avec succès"),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="string"),
+     *                 @OA\Property(property="statut", type="string", example="bloque"),
+     *                 @OA\Property(property="motifBlocage", type="string"),
+     *                 @OA\Property(property="dateBlocage", type="string", format="date-time"),
+     *                 @OA\Property(property="dateDeblocagePrevue", type="string", format="date-time")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Compte non actif ou données invalides",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
+     *                 @OA\Property(property="message", type="string", example="Le compte doit être actif pour être bloqué")
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function bloquer(CompteBloquerRequest $request, string $numero)
     {
         $compte = Compte::where('numeroCompte', $numero)->firstOrFail();
 
+        if ($compte->statut !== 'actif') {
+            return $this->errorResponse('Le compte doit être actif pour être bloqué.', 400);
+        }
+
+        $dateDebut = now();
+        $dateFin = match ($request->unite) {
+            'jours' => $dateDebut->copy()->addDays($request->duree),
+            'mois' => $dateDebut->copy()->addMonths($request->duree),
+            'annees' => $dateDebut->copy()->addYears($request->duree),
+        };
+
         $compte->update([
             'statut' => 'bloque',
-            'motifBlocage' => $request->motifBlocage,
-            'dateDebutBlocage' => $request->dateDebutBlocage,
-            'dateFinBlocage' => $request->dateFinBlocage,
+            'motifBlocage' => $request->motif,
+            'dateDebutBlocage' => $dateDebut,
+            'dateFinBlocage' => $dateFin,
         ]);
 
-        return $this->successResponse(new CompteResource($compte), 'Compte bloqué avec succès');
+        return $this->successResponse([
+            'id' => $compte->id,
+            'statut' => $compte->statut,
+            'motifBlocage' => $compte->motifBlocage,
+            'dateBlocage' => $compte->dateDebutBlocage,
+            'dateDeblocagePrevue' => $compte->dateFinBlocage,
+        ], 'Compte bloqué avec succès');
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/v1/faye-yatedene/comptes/{numero}/debloquer",
+     *     summary="Débloquer un compte",
+     *     description="Débloque un compte bloqué",
+     *     tags={"Comptes"},
+     *     @OA\Parameter(
+     *         name="numero",
+     *         in="path",
+     *         description="Numéro du compte",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"motif"},
+     *             @OA\Property(property="motif", type="string", example="Vérification complétée")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Compte débloqué avec succès",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Compte débloqué avec succès"),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="string"),
+     *                 @OA\Property(property="statut", type="string", example="actif"),
+     *                 @OA\Property(property="dateDeblocage", type="string", format="date-time")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Compte non bloqué",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="error", type="object",
+     *                 @OA\Property(property="code", type="string", example="VALIDATION_ERROR"),
+     *                 @OA\Property(property="message", type="string", example="Le compte n'est pas bloqué")
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function debloquer(CompteDebloquerRequest $request, string $numero)
+    {
+        $compte = Compte::where('numeroCompte', $numero)->firstOrFail();
+
+        if ($compte->statut !== 'bloque') {
+            return $this->errorResponse('Le compte n\'est pas bloqué.', 400);
+        }
+
+        $compte->update([
+            'statut' => 'actif',
+            'motifBlocage' => null,
+            'dateDebutBlocage' => null,
+            'dateFinBlocage' => null,
+        ]);
+
+        return $this->successResponse([
+            'id' => $compte->id,
+            'statut' => $compte->statut,
+            'dateDeblocage' => now(),
+        ], 'Compte débloqué avec succès');
     }
 }
