@@ -20,8 +20,10 @@ php artisan l5-swagger:generate
 mkdir -p public/vendor/swagger-api/swagger-ui/dist
 cp -r vendor/swagger-api/swagger-ui/dist/* public/vendor/swagger-api/swagger-ui/dist/ 2>/dev/null || true
 
-# Clear config cache again after generating docs
+# Clear all caches after generating docs
 php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
 
 # Start Apache
 apache2-foreground
