@@ -1,29 +1,249 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API de Gestion de Comptes",
-        "description": "API pour la gestion des comptes bancaires",
+        "title": "Bank Account Management API",
+        "description": "API for managing bank accounts",
+        "contact": {
+            "name": "Faye Yatedene",
+            "email": "faye.yatedene@example.com"
+        },
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "https://ges-compte.onrender.com/api/v1"
+            "url": "https://ges-compte.onrender.com/api/v1",
+            "description": "Production server"
+        },
+        {
+            "url": "http://localhost:8000/api/v1",
+            "description": "Development server"
+        },
+        {
+            "url": "/api/v1"
         }
     ],
     "paths": {
-        "/v1/faye-yatedene/comptes": {
+        "/v1/authentication/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User login",
+                "description": "Authenticates a user and returns an access token",
+                "operationId": "f8b21f278a93ec5f570450985b0f54e3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "UNAUTHORIZED"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Invalid credentials"
+                                                },
+                                                "timestamp": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "path": {
+                                                    "type": "string"
+                                                },
+                                                "traceId": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/authentication/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresh access token",
+                "description": "Generates a new access token using the refresh token",
+                "operationId": "e2dbdd2167289a88d167618805ced1ad",
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing or invalid refresh token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "UNAUTHORIZED"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "No refresh token"
+                                                },
+                                                "timestamp": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "path": {
+                                                    "type": "string"
+                                                },
+                                                "traceId": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/authentication/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User logout",
+                "description": "Revokes the current user's access token",
+                "operationId": "39619ff291ed512ab58391ed7bbfdb01",
+                "responses": {
+                    "200": {
+                        "description": "Logout successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string",
+                                                    "example": "UNAUTHORIZED"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Unauthorized"
+                                                },
+                                                "timestamp": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "path": {
+                                                    "type": "string"
+                                                },
+                                                "traceId": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/accounts": {
             "get": {
                 "tags": [
-                    "Comptes"
+                    "Accounts"
                 ],
-                "summary": "Liste des comptes",
-                "description": "Récupère la liste des comptes avec filtres et pagination",
-                "operationId": "f01153497b275d891703e262fc52761b",
+                "summary": "List accounts",
+                "description": "Retrieve a list of accounts with filters and pagination",
+                "operationId": "10c99bb2a3bd576ac643a52e4b535587",
                 "parameters": [
                     {
                         "name": "type",
                         "in": "query",
-                        "description": "Type de compte",
+                        "description": "Account type",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -32,7 +252,7 @@
                     {
                         "name": "statut",
                         "in": "query",
-                        "description": "Statut du compte",
+                        "description": "Account status",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -41,7 +261,7 @@
                     {
                         "name": "search",
                         "in": "query",
-                        "description": "Recherche par titulaire ou numéro",
+                        "description": "Search by holder name or account number",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -50,7 +270,7 @@
                     {
                         "name": "sort",
                         "in": "query",
-                        "description": "Champ de tri",
+                        "description": "Sort field",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -60,7 +280,7 @@
                     {
                         "name": "order",
                         "in": "query",
-                        "description": "Ordre de tri",
+                        "description": "Sort order",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -74,7 +294,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Nombre d'éléments par page",
+                        "description": "Items per page",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -85,7 +305,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Liste des comptes",
+                        "description": "List of accounts",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -97,7 +317,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/Compte"
+                                                "$ref": "#/components/schemas/Account"
                                             }
                                         },
                                         "pagination": {
@@ -131,55 +351,980 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Create a new account",
+                "description": "Create a new bank account with client verification",
+                "operationId": "e30bc90c822ccc7bfeb79e51c52bb81a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "type",
+                                    "soldeInitial",
+                                    "devise",
+                                    "client"
+                                ],
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "cheque",
+                                            "epargne"
+                                        ],
+                                        "example": "cheque"
+                                    },
+                                    "soldeInitial": {
+                                        "type": "number",
+                                        "minimum": 10000,
+                                        "example": 500000
+                                    },
+                                    "devise": {
+                                        "type": "string",
+                                        "example": "FCFA"
+                                    },
+                                    "client": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "format": "uuid",
+                                                "nullable": true
+                                            },
+                                            "titulaire": {
+                                                "type": "string",
+                                                "example": "Hawa BB Wane"
+                                            },
+                                            "nci": {
+                                                "type": "string",
+                                                "example": "1234567890123",
+                                                "nullable": true
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "example": "cheikh.sy@example.com"
+                                            },
+                                            "telephone": {
+                                                "type": "string",
+                                                "example": "+221771234567"
+                                            },
+                                            "adresse": {
+                                                "type": "string",
+                                                "example": "Dakar, Senegal"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Account created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account created successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Account"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/accounts/{numero}": {
+            "get": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Get specific account",
+                "description": "Retrieve details of a specific account by its number",
+                "operationId": "240f8399c3f3b47e357b4eea55b5f165",
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "path",
+                        "description": "Account number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Account"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Delete account",
+                "description": "Soft delete an account, change status to 'ferme' and delete associated transactions",
+                "operationId": "a16d1e5a225992d32310c964e421bed3",
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "path",
+                        "description": "Account number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account deleted successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Account"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Update account",
+                "description": "Update account and associated client information",
+                "operationId": "eefceee1d3d62f8a746874e9060875e3",
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "path",
+                        "description": "Account number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "titulaire": {
+                                        "type": "string",
+                                        "example": "Amadou Diallo Junior"
+                                    },
+                                    "informationsClient": {
+                                        "properties": {
+                                            "telephone": {
+                                                "type": "string",
+                                                "example": "+221771234568"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "format": "email",
+                                                "example": "amadou.diallo@example.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "newpassword123"
+                                            },
+                                            "nci": {
+                                                "type": "string",
+                                                "example": "1234567890123"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Account updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account updated successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Account"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/accounts/{numero}/block": {
+            "patch": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Block account",
+                "description": "Block an active account and calculate blocking dates",
+                "operationId": "e838c8273f4dc44cf580c15880a87c0c",
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "path",
+                        "description": "Account number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "motif",
+                                    "duree",
+                                    "unite"
+                                ],
+                                "properties": {
+                                    "motif": {
+                                        "type": "string",
+                                        "example": "Suspicious activity detected"
+                                    },
+                                    "duree": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 30
+                                    },
+                                    "unite": {
+                                        "type": "string",
+                                        "enum": [
+                                            "jours",
+                                            "mois",
+                                            "annees"
+                                        ],
+                                        "example": "mois"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Account blocked successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account blocked successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "statut": {
+                                                    "type": "string",
+                                                    "example": "bloque"
+                                                },
+                                                "motifBlocage": {
+                                                    "type": "string"
+                                                },
+                                                "dateBlocage": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "dateDeblocagePrevue": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Account not active or invalid data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/accounts/{numero}/unblock": {
+            "patch": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Unblock account",
+                "description": "Unblock a blocked account",
+                "operationId": "8e6e7dda1b74c5333e8b7917e1c0d141",
+                "parameters": [
+                    {
+                        "name": "numero",
+                        "in": "path",
+                        "description": "Account number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "motif"
+                                ],
+                                "properties": {
+                                    "motif": {
+                                        "type": "string",
+                                        "example": "Verification completed"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Account unblocked successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account unblocked successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "statut": {
+                                                    "type": "string",
+                                                    "example": "actif"
+                                                },
+                                                "dateDeblocage": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Account not blocked",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
     "components": {
         "schemas": {
-            "Compte": {
+            "LoginRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    }
+                },
+                "type": "object"
+            },
+            "AuthResponse": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "example": "Bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "example": 3600
+                    }
+                },
+                "type": "object"
+            },
+            "Account": {
                 "properties": {
                     "id": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "uuid-string"
                     },
                     "numeroCompte": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "ACC001234567"
                     },
                     "titulaire": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "John Doe"
                     },
                     "type": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                            "cheque",
+                            "epargne"
+                        ],
+                        "example": "cheque"
                     },
                     "solde": {
-                        "type": "number"
+                        "type": "number",
+                        "example": 500000
                     },
                     "devise": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "FCFA"
                     },
                     "dateCreation": {
                         "type": "string",
-                        "format": "date"
+                        "format": "date",
+                        "example": "2025-01-15"
                     },
                     "statut": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                            "actif",
+                            "bloque",
+                            "ferme"
+                        ],
+                        "example": "actif"
                     },
                     "motifBlocage": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "Suspicious activity",
+                        "nullable": true
+                    },
+                    "dateFermeture": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-27T18:00:00Z",
+                        "nullable": true
                     },
                     "metadata": {
+                        "type": "object",
+                        "example": {
+                            "derniereModification": "2025-10-27T18:00:00Z",
+                            "version": 1
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "error": {
+                        "properties": {
+                            "code": {
+                                "type": "string",
+                                "example": "VALIDATION_ERROR"
+                            },
+                            "message": {
+                                "type": "string",
+                                "example": "Validation failed"
+                            },
+                            "details": {
+                                "type": "object",
+                                "example": {
+                                    "field": "error message"
+                                }
+                            },
+                            "timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-10-27T18:00:00Z"
+                            },
+                            "path": {
+                                "type": "string",
+                                "example": "/api/v1/accounts"
+                            },
+                            "traceId": {
+                                "type": "string",
+                                "example": "abc-def-ghi-123"
+                            }
+                        },
                         "type": "object"
                     }
                 },
                 "type": "object"
             }
+        },
+        "parameters": {
+            "AuthorizationHeader": {
+                "name": "Authorization",
+                "in": "header",
+                "description": "JWT access token",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "example": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+                }
+            },
+            "ContentTypeHeader": {
+                "name": "Content-Type",
+                "in": "header",
+                "description": "Content type",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "example": "application/json"
+                }
+            },
+            "AcceptHeader": {
+                "name": "Accept",
+                "in": "header",
+                "description": "Accept header",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "example": "application/json"
+                }
+            },
+            "AcceptLanguageHeader": {
+                "name": "Accept-Language",
+                "in": "header",
+                "description": "Language preference",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "fr-FR"
+                }
+            },
+            "RequestIdHeader": {
+                "name": "X-Request-ID",
+                "in": "header",
+                "description": "Unique request identifier",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "unique-request-id"
+                }
+            },
+            "ApiVersionHeader": {
+                "name": "X-API-Version",
+                "in": "header",
+                "description": "API version",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "example": "v1"
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
         }
     },
     "tags": [
         {
-            "name": "Comptes",
-            "description": "Comptes"
+            "name": "Authentication",
+            "description": "User authentication endpoints"
+        },
+        {
+            "name": "Accounts",
+            "description": "Bank account management endpoints"
         }
-    ]
+    ],
+    "externalDocs": {
+        "description": "API Documentation",
+        "url": "https://example.com/docs"
+    }
 }
