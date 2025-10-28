@@ -1,95 +1,64 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Banque API",
-    "description": "API pour la gestion des comptes bancaires",
-    "version": "1.0.0"
+    "title": "API de gestion des comptes bancaires",
+    "description": "API pour gérer les comptes bancaires",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Faye Yatedene"
+    }
   },
   "servers": [
     {
-      "url": "https://ges-compte.onrender.com/api/v1"
+      "url": "https://ges-compte.onrender.com/api/v1",
+      "description": "production"
+    },
+    {
+      "url": "http://localhost:3000/api",
+      "description": "dev"
+    },
+    {
+      "url": "/api/v1",
+      "description": "relative"
     }
   ],
   "paths": {
-    "/comptes": {
+    "/v1/accounts": {
       "get": {
-        "summary": "Lister tous les comptes",
-        "description": "1-Admin peut recuperer la liste de tous les comptes\n2-Client peut recuperer la liste de ses comptes\nNB : Liste compte non supprimes type cheque ou compte Epargne Actif",
+        "tags": [
+          "Comptes"
+        ],
+        "summary": "Lister les comptes",
+        "description": "Récupère la liste paginée des comptes avec filtres",
         "parameters": [
           {
-            "name": "page",
+            "name": "type",
             "in": "query",
-            "description": "Numéro de page",
             "required": false,
             "schema": {
-              "type": "integer",
-              "default": 1
-            }
+              "type": "string"
+            },
+            "description": "Filtrer par type de compte (cheque|epargne)"
           },
           {
             "name": "limit",
             "in": "query",
-            "description": "Nombre d'éléments par page",
             "required": false,
             "schema": {
               "type": "integer",
-              "default": 10,
-              "maximum": 100
-            }
+              "default": 10
+            },
+            "description": "Nombre d'éléments par page"
           },
           {
-            "name": "type",
+            "name": "page",
             "in": "query",
-            "description": "Filtrer par type",
             "required": false,
             "schema": {
-              "type": "string",
-              "enum": ["epargne", "cheque"]
-            }
-          },
-          {
-            "name": "statut",
-            "in": "query",
-            "description": "Filtrer par statut",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["actif", "bloque", "ferme"]
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "description": "Recherche par titulaire ou numéro",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Tri",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["dateCreation", "solde", "titulaire"]
-            }
-          },
-          {
-            "name": "order",
-            "in": "query",
-            "description": "Ordre",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["asc", "desc"]
-            }
-          }
-        ],
-        "security": [
-          {
-            "bearerAuth": []
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Numéro de page"
           }
         ],
         "responses": {
@@ -98,55 +67,246 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Compte"
-                      }
-                    },
-                    "pagination": {
-                      "$ref": "#/components/schemas/Pagination"
-                    },
-                    "links": {
-                      "$ref": "#/components/schemas/Links"
-                    }
-                  }
+                  "$ref": "#/components/schemas/AccountListResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Paramètres invalides"
           },
           "429": {
-            "description": "Too Many Requests",
+            "description": "Trop de requêtes"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Comptes"
+        ],
+        "summary": "Créer un nouveau compte",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Compte créé",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "422": {
+            "description": "Erreur de validation"
+          }
+        }
+      }
+    },
+    "/v1/accounts/{numero}": {
+      "parameters": [
+        {
+          "name": "numero",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Numéro unique du compte"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Comptes"
+        ],
+        "summary": "Récupérer un compte",
+        "responses": {
+          "200": {
+            "description": "Détails du compte",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Compte introuvable"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Comptes"
+        ],
+        "summary": "Mettre à jour un compte",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountPatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Compte mis à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "422": {
+            "description": "Erreur de validation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comptes"
+        ],
+        "summary": "Supprimer un compte",
+        "description": "Supprime définitivement le compte identifié par {numero}",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Compte supprimé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Compte introuvable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{numero}/bloquer": {
+      "post": {
+        "tags": [
+          "Comptes"
+        ],
+        "summary": "Bloquer un compte",
+        "description": "Bloque le compte (motif optionnel)",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Compte bloqué",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Compte introuvable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{numero}/debloquer": {
+      "post": {
+        "tags": [
+          "Comptes"
+        ],
+        "summary": "Débloquer un compte",
+        "description": "Débloque le compte",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Compte débloqué",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Compte introuvable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -157,31 +317,33 @@
   },
   "components": {
     "schemas": {
-      "Compte": {
+      "Account": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid",
-            "example": "550e8400-e29b-41d4-a716-446655440000"
+            "example": "uuid-1234"
           },
           "numeroCompte": {
             "type": "string",
-            "example": "C00123456"
+            "example": "ACC001234567"
           },
           "titulaire": {
             "type": "string",
-            "example": "Amadou Diallo"
+            "example": "John Doe"
           },
           "type": {
             "type": "string",
-            "enum": ["epargne", "cheque"],
-            "example": "epargne"
+            "enum": [
+              "cheque",
+              "epargne"
+            ],
+            "example": "cheque"
           },
           "solde": {
             "type": "number",
             "format": "float",
-            "example": 1250000
+            "example": 125000.5
           },
           "devise": {
             "type": "string",
@@ -190,127 +352,139 @@
           "dateCreation": {
             "type": "string",
             "format": "date-time",
-            "example": "2023-03-15T00:00:00Z"
+            "example": "2025-01-15T10:00:00Z"
           },
           "statut": {
             "type": "string",
-            "enum": ["actif", "bloque", "ferme"],
-            "example": "bloque"
+            "enum": [
+              "actif",
+              "bloque",
+              "ferme"
+            ],
+            "example": "actif"
           },
           "motifBlocage": {
             "type": "string",
-            "example": "Inactivité de 30+ jours"
-          },
-          "metadata": {
-            "type": "object",
-            "properties": {
-              "derniereModification": {
-                "type": "string",
-                "format": "date-time",
-                "example": "2023-06-10T14:30:00Z"
-              },
-              "version": {
-                "type": "integer",
-                "example": 1
-              }
-            }
+            "nullable": true
           }
-        }
+        },
+        "required": [
+          "numeroCompte",
+          "titulaire",
+          "type",
+          "solde"
+        ]
       },
-      "Pagination": {
-        "type": "object",
-        "properties": {
-          "currentPage": {
-            "type": "integer",
-            "example": 1
-          },
-          "totalPages": {
-            "type": "integer",
-            "example": 3
-          },
-          "totalItems": {
-            "type": "integer",
-            "example": 25
-          },
-          "itemsPerPage": {
-            "type": "integer",
-            "example": 10
-          },
-          "hasNext": {
-            "type": "boolean",
-            "example": true
-          },
-          "hasPrevious": {
-            "type": "boolean",
-            "example": false
-          }
-        }
-      },
-      "Links": {
-        "type": "object",
-        "properties": {
-          "self": {
-            "type": "string",
-            "example": "/api/v1/comptes?page=1&limit=10"
-          },
-          "next": {
-            "type": "string",
-            "example": "/api/v1/comptes?page=2&limit=10"
-          },
-          "first": {
-            "type": "string",
-            "example": "/api/v1/comptes?page=1&limit=10"
-          },
-          "last": {
-            "type": "string",
-            "example": "/api/v1/comptes?page=3&limit=10"
-          }
-        }
-      },
-      "Error": {
+      "AccountListResponse": {
         "type": "object",
         "properties": {
           "success": {
-            "type": "boolean",
-            "example": false
+            "type": "boolean"
           },
-          "error": {
-            "type": "object",
-            "properties": {
-              "code": {
-                "type": "string",
-                "example": "ERROR_400"
-              },
-              "message": {
-                "type": "string",
-                "example": "Bad Request"
-              },
-              "details": {
-                "type": "object"
-              },
-              "timestamp": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "path": {
-                "type": "string",
-                "example": "/api/v1/comptes"
-              },
-              "traceId": {
-                "type": "string",
-                "example": "abc-def-ghi-123"
-              }
+          "page": {
+            "type": "integer"
+          },
+          "per_page": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Account"
             }
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      },
+      "AccountCreateRequest": {
+        "type": "object",
+        "required": [
+          "type",
+          "solde",
+          "titulaire"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "cheque",
+              "epargne"
+            ]
+          },
+          "solde": {
+            "type": "number",
+            "minimum": 0
+          },
+          "devise": {
+            "type": "string",
+            "default": "FCFA"
+          },
+          "titulaire": {
+            "type": "string"
+          },
+          "client": {
+            "type": "object"
+          }
+        }
+      },
+      "AccountResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Account"
+          }
+        }
+      },
+      "AccountPatchRequest": {
+        "type": "object",
+        "properties": {
+          "titulaire": {
+            "type": "string"
+          },
+          "devise": {
+            "type": "string"
+          },
+          "statut": {
+            "type": "string",
+            "enum": [
+              "actif",
+              "bloque",
+              "ferme"
+            ]
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object"
+          }
+        }
+      },
+      "BlockRequest": {
+        "type": "object",
+        "properties": {
+          "motif": {
+            "type": "string",
+            "example": "Activité suspecte"
+          }
+        }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Comptes",
+      "description": "Endpoints de gestion des comptes bancaires"
+    }
+  ]
 }
