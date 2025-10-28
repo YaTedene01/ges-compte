@@ -12,12 +12,6 @@ use Laravel\Passport\Token;
 use Nyholm\Psr7\Factory\Psr17Factory;
 
 /**
- * @OA\Info(
- *     title="API d'Authentification",
- *     version="1.0.0",
- *     description="API pour l'authentification des utilisateurs"
- * )
- *
  * @OA\Schema(
  *     schema="LoginRequest",
  *     type="object",

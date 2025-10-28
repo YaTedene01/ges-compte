@@ -30,7 +30,7 @@ use Illuminate\Validation\Rule;
  * )
  *
  * @OA\Server(
- *     url="https://api.banque.example.com/api/v1",
+ *     url="https://ges-compte.onrender.com/api/v1",
  *     description="Production server"
  * )
  *
@@ -58,23 +58,8 @@ use Illuminate\Validation\Rule;
  * )
  *
  * @OA\ExternalDocumentation(
- *     description="JWT Token Specifications",
- *     url="https://tools.ietf.org/html/rfc7519"
- * )
- *
- * @OA\ExternalDocumentation(
- *     description="OAuth 2.0 Protocol",
- *     url="https://tools.ietf.org/html/rfc6749"
- * )
- *
- * @OA\ExternalDocumentation(
- *     description="CORS Specifications",
- *     url="https://fetch.spec.whatwg.org/#cors-protocol"
- * )
- *
- * @OA\ExternalDocumentation(
- *     description="Rate Limiting Best Practices",
- *     url="https://tools.ietf.org/html/rfc6585"
+ *     description="API Documentation",
+ *     url="https://example.com/docs"
  * )
  *
  * @OA\Schema(
@@ -93,21 +78,7 @@ use Illuminate\Validation\Rule;
  *     @OA\Property(property="metadata", type="object", example={"derniereModification": "2025-10-27T18:00:00Z", "version": 1})
  * )
  *
- * @OA\Schema(
- *     schema="LoginRequest",
- *     type="object",
- *     required={"email", "password"},
- *     @OA\Property(property="email", type="string", format="email", example="user@example.com"),
- *     @OA\Property(property="password", type="string", example="password123")
- * )
  *
- * @OA\Schema(
- *     schema="AuthResponse",
- *     type="object",
- *     @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."),
- *     @OA\Property(property="token_type", type="string", example="Bearer"),
- *     @OA\Property(property="expires_in", type="integer", example=3600)
- * )
  *
  * @OA\Schema(
  *     schema="ErrorResponse",
