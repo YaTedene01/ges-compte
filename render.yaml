@@ -23,11 +23,15 @@ services:
       - key: DB_PASSWORD
         fromSecret: db-password
       - key: L5_SWAGGER_GENERATE_ALWAYS
-        value: false
+        value: true
       - key: L5_SWAGGER_USE_ABSOLUTE_PATH
         value: true
       - key: L5_SWAGGER_UI_ASSETS_URL
-        value: https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/
+        value: https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0
+      - key: L5_FORMAT_TO_USE_FOR_DOCS
+        value: json
+      - key: L5_SWAGGER_CONST_HOST
+        value: https://ges-compte.onrender.com
       - key: L5_SWAGGER_BASE_PATH
         value: /api/v1
       - key: LOG_CHANNEL

@@ -19,7 +19,7 @@ return [
                 /*
                  * Edit to include full URL in ui for assets
                  */
-                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', false),
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
 
                 /*
                  * Edit to set path where swagger ui assets should be stored
@@ -29,7 +29,7 @@ return [
                 /*
                  * Absolute URL to the swagger ui assets
                  */
-                'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', null),
+                'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0'),
 
                 /*
                  * File name of the generated json documentation file
