@@ -14,13 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return response()->json(['message' => 'API is running', 'docs' => url('/docs')]);
+    return response()->json(['message' => 'API is running', 'docs' => 'https://ges-compte.onrender.com/docs']);
 });
 
 // Swagger documentation routes
 Route::get('/docs', function () {
     $documentation = 'default';
-    $urlToDocs = url('/api/documentation');
+    $urlToDocs = 'https://ges-compte.onrender.com/api/documentation';
     $configUrl = config('l5-swagger.defaults.additional_config_url');
     $validatorUrl = config('l5-swagger.defaults.validator_url');
     $operationsSorter = config('l5-swagger.defaults.operations_sort');
