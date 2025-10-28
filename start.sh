@@ -13,12 +13,8 @@ php artisan migrate --seed
 php artisan config:clear
 
 # Generate Swagger documentation
-php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force
-php artisan l5-swagger:generate
-
-# Copy Swagger UI assets to public directory
-mkdir -p public/vendor/swagger-api/swagger-ui/dist
-cp -r vendor/swagger-api/swagger-ui/dist/* public/vendor/swagger-api/swagger-ui/dist/ 2>/dev/null || true
+# Swagger documentation is generated at build time and shipped in public/swagger.json
+# (See Dockerfile). Avoid generating docs at runtime to keep startup fast and deterministic.
 
 # Clear all caches after generating docs
 php artisan config:clear

@@ -36,13 +36,13 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # Install Node.js dependencies and build assets
 RUN npm install && npm run build
 
-# Download Swagger UI assets
-RUN mkdir -p public/vendor/swagger-api/swagger-ui/dist && \
-    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/swagger-ui-bundle.js -o public/vendor/swagger-api/swagger-ui/dist/swagger-ui-bundle.js && \
-    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/swagger-ui-standalone-preset.js -o public/vendor/swagger-api/swagger-ui/dist/swagger-ui-standalone-preset.js && \
-    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/swagger-ui.css -o public/vendor/swagger-api/swagger-ui/dist/swagger-ui.css && \
-    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/favicon-32x32.png -o public/vendor/swagger-api/swagger-ui/dist/favicon-32x32.png && \
-    curl -L https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/favicon-16x16.png -o public/vendor/swagger-api/swagger-ui/dist/favicon-16x16.png
+# Generate Swagger documentation at build time and include it in the image
+# This ensures the deployed image serves the current API docs without relying on runtime generation.
+RUN php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force || true && \
+    php artisan l5-swagger:generate || true && \
+    mkdir -p public/vendor/swagger-api/swagger-ui/dist && \
+    cp -r vendor/swagger-api/swagger-ui/dist/* public/vendor/swagger-api/swagger-ui/dist/ 2>/dev/null || true && \
+    cp storage/api-docs/swagger.json public/swagger.json || true
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
