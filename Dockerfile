@@ -46,7 +46,14 @@ RUN mkdir -p public/vendor/swagger-api/swagger-ui/dist && \
         echo "No committed public/swagger.json found — generating documentation at build time"; \
         php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force || true && \
         php artisan l5-swagger:generate || true && \
-        cp storage/api-docs/swagger.json public/swagger.json || true; \
+        if [ -f storage/api-docs/swagger.json ]; then \
+            cp storage/api-docs/swagger.json public/swagger.json && echo "Swagger generated and copied to public/swagger.json"; \
+            # remove auth endpoints/definitions and translate to French for the public UI
+            php scripts/remove_auth_from_swagger.php public/swagger.json || true && \
+            php scripts/translate_swagger_fr.php public/swagger.json || true; \
+        else \
+            echo "ERROR: swagger.json was not generated (storage/api-docs/swagger.json missing)" >&2 && exit 1; \
+        fi; \
     fi
 
 # Set permissions
