@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Bank Account Management API",
-        "description": "API for managing bank accounts",
+        "title": "API de gestion des comptes bancaires",
+        "description": "API pour gérer les comptes bancaires",
         "contact": {
             "name": "Faye Yatedene",
             "email": "faye.yatedene@example.com"
@@ -12,11 +12,11 @@
     "servers": [
         {
             "url": "https://ges-compte.onrender.com/api/v1",
-            "description": "Production server"
+            "description": "Serveur de production"
         },
         {
             "url": "http://127.0.0.1:3000/api",
-            "description": "Development server"
+            "description": "Serveur de développement"
         },
         {
             "url": "/api/v1"
@@ -26,16 +26,16 @@
         "/v1/accounts": {
             "get": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "List accounts",
-                "description": "Retrieve a list of accounts with filters and pagination",
+                "summary": "Lister les comptes",
+                "description": "Récupère une liste de comptes avec filtres et pagination",
                 "operationId": "10c99bb2a3bd576ac643a52e4b535587",
                 "parameters": [
                     {
                         "name": "type",
                         "in": "query",
-                        "description": "Account type",
+                        "description": "Type de compte",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -44,7 +44,7 @@
                     {
                         "name": "statut",
                         "in": "query",
-                        "description": "Account status",
+                        "description": "Statut du compte",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -53,7 +53,7 @@
                     {
                         "name": "search",
                         "in": "query",
-                        "description": "Search by holder name or account number",
+                        "description": "Rechercher par nom du titulaire ou numéro de compte",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -62,7 +62,7 @@
                     {
                         "name": "sort",
                         "in": "query",
-                        "description": "Sort field",
+                        "description": "Champ de tri",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -72,7 +72,7 @@
                     {
                         "name": "order",
                         "in": "query",
-                        "description": "Sort order",
+                        "description": "Ordre de tri",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -86,7 +86,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Items per page",
+                        "description": "Éléments par page",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -97,7 +97,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of accounts",
+                        "description": "Listere of comptes",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -109,7 +109,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/Account"
+                                                "$ref": "#/components/schemas/Compte"
                                             }
                                         },
                                         "pagination": {
@@ -149,7 +149,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -158,10 +158,10 @@
             },
             "post": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Create a new account",
-                "description": "Create a new bank account with client verification",
+                "summary": "Créer un nouveau compte",
+                "description": "Créer un nouveau compte bancaire avec vérification du client",
                 "operationId": "e30bc90c822ccc7bfeb79e51c52bb81a",
                 "requestBody": {
                     "required": true,
@@ -232,7 +232,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Account created successfully",
+                        "description": "Compte créé avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -243,10 +243,10 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Account created successfully"
+                                            "example": "Compte créé avec succès"
                                         },
                                         "data": {
-                                            "$ref": "#/components/schemas/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -259,7 +259,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -269,7 +269,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -279,7 +279,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -290,16 +290,16 @@
         "/v1/accounts/{numero}": {
             "get": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Get specific account",
-                "description": "Retrieve details of a specific account by its number",
+                "summary": "Obtenir un compte spécifique",
+                "description": "Récupère les détails d'un compte spécifique par son numéro",
                 "operationId": "240f8399c3f3b47e357b4eea55b5f165",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -308,7 +308,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Account details",
+                        "description": "Compte details",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -318,7 +318,7 @@
                                             "example": true
                                         },
                                         "data": {
-                                            "$ref": "#/components/schemas/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -327,11 +327,11 @@
                         }
                     },
                     "404": {
-                        "description": "Account not found",
+                        "description": "Compte not found",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -341,7 +341,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -350,16 +350,16 @@
             },
             "delete": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Delete account",
-                "description": "Soft delete an account, change status to 'ferme' and delete associated transactions",
+                "summary": "Supprimer un compte",
+                "description": "Suppression logique d'un compte : changer le statut en 'ferme' et supprimer les transactions associées",
                 "operationId": "a16d1e5a225992d32310c964e421bed3",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -368,7 +368,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Account deleted successfully",
+                        "description": "Compte supprimé avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -379,10 +379,10 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Account deleted successfully"
+                                            "example": "Compte supprimé avec succès"
                                         },
                                         "data": {
-                                            "$ref": "#/components/schemas/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -391,11 +391,11 @@
                         }
                     },
                     "404": {
-                        "description": "Account not found",
+                        "description": "Compte not found",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -405,7 +405,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -414,16 +414,16 @@
             },
             "patch": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Update account",
-                "description": "Update account and associated client information",
+                "summary": "Mettre à jour le compte",
+                "description": "Met à jour le compte et les informations client associées",
                 "operationId": "eefceee1d3d62f8a746874e9060875e3",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -453,7 +453,7 @@
                                             },
                                             "password": {
                                                 "type": "string",
-                                                "example": "newpassword123"
+                                                "example": "newmot de passe123"
                                             },
                                             "nci": {
                                                 "type": "string",
@@ -470,7 +470,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Account updated successfully",
+                        "description": "Compte mis à jour avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -481,10 +481,10 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Account updated successfully"
+                                            "example": "Compte mis à jour avec succès"
                                         },
                                         "data": {
-                                            "$ref": "#/components/schemas/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -493,11 +493,11 @@
                         }
                     },
                     "404": {
-                        "description": "Account not found",
+                        "description": "Compte not found",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -507,7 +507,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -517,7 +517,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -528,16 +528,16 @@
         "/v1/accounts/{numero}/block": {
             "patch": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Block account",
-                "description": "Block an active account and calculate blocking dates",
+                "summary": "Bloquer le compte",
+                "description": "Bloquer un compte actif et calculer les dates de blocage",
                 "operationId": "e838c8273f4dc44cf580c15880a87c0c",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -581,7 +581,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Account blocked successfully",
+                        "description": "Compte Bloquered successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -592,7 +592,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Account blocked successfully"
+                                            "example": "Compte Bloquered successfully"
                                         },
                                         "data": {
                                             "properties": {
@@ -624,21 +624,21 @@
                         }
                     },
                     "400": {
-                        "description": "Account not active or invalid data",
+                        "description": "Compte not active or invalid data",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Account not found",
+                        "description": "Compte not found",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -648,7 +648,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -658,7 +658,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -669,16 +669,16 @@
         "/v1/accounts/{numero}/unblock": {
             "patch": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Unblock account",
-                "description": "Unblock a blocked account",
+                "summary": "Débloquer le compte",
+                "description": "Débloquer un compte bloqué",
                 "operationId": "8e6e7dda1b74c5333e8b7917e1c0d141",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -706,7 +706,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Account unblocked successfully",
+                        "description": "Compte unBloquered successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -717,7 +717,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Account unblocked successfully"
+                                            "example": "Compte unBloquered successfully"
                                         },
                                         "data": {
                                             "properties": {
@@ -742,21 +742,21 @@
                         }
                     },
                     "400": {
-                        "description": "Account not blocked",
+                        "description": "Compte not Bloquered",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Account not found",
+                        "description": "Compte not found",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -766,7 +766,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -776,7 +776,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorRéponse"
                                 }
                             }
                         }
@@ -881,7 +881,7 @@
                             },
                             "path": {
                                 "type": "string",
-                                "example": "/api/v1/accounts"
+                                "example": "/api/v1/comptes"
                             },
                             "traceId": {
                                 "type": "string",
@@ -949,8 +949,8 @@
     },
     "tags": [
         {
-            "name": "Accounts",
-            "description": "Bank account management endpoints"
+            "name": "Comptes",
+            "description": "Bank compte management endpoints"
         }
     ],
     "externalDocs": {
