@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ges-compte-faye-yatedene
+    name: test-ges-compte-faye-yatedene
     runtime: docker
     dockerfilePath: ./Dockerfile
     envVars:
@@ -26,11 +26,21 @@ services:
         value: false
       - key: L5_SWAGGER_USE_ABSOLUTE_PATH
         value: true
+      - key: L5_SWAGGER_UI_ASSETS_URL
+        value: https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/
       - key: L5_SWAGGER_BASE_PATH
         value: /api/v1
+      - key: LOG_CHANNEL
+        value: null
+      - key: SESSION_DRIVER
+        value: array
+      - key: CACHE_DRIVER
+        value: array
+      - key: VIEW_COMPILED_PATH
+        value: /tmp/laravel-views
     secrets:
       - key: app-url
-        value: https://ges-compte-faye-yatedene.onrender.com
+        value: https://test-ges-compte-faye-yatedene.onrender.com
       - key: db-host
         value: YOUR_DB_HOST
       - key: db-port
