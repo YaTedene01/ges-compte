@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'Banque API Documentation',
             ],
 
             'routes' => [
@@ -22,24 +22,19 @@ return [
                 'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
 
                 /*
-                 * Edit to set path where swagger ui assets should be stored
-                 */
+                * Edit to set path where swagger ui assets should be stored
+                */
                 'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
-
-                /*
-                 * Absolute URL to the swagger ui assets
-                 */
-                'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0'),
 
                 /*
                  * File name of the generated json documentation file
                  */
-                'docs_json' => 'swagger.json',
+                'docs_json' => 'api-docs.json',
 
                 /*
                  * File name of the generated YAML documentation file
                  */
-                'docs_yaml' => 'swagger.yaml',
+                'docs_yaml' => 'api-docs.yaml',
 
                 /*
                  * Set this to `json` or `yaml` to determine which documentation file to use in UI
@@ -97,7 +92,7 @@ return [
             /*
              * Edit to set the api's base path
              */
-            'base' => env('L5_SWAGGER_BASE_PATH', 'https://test-ges-compte-faye-yatedene.onrender.com'),
+            'base' => env('L5_SWAGGER_BASE_PATH', null),
 
             /*
              * Absolute path to directories that should be excluded from scanning
