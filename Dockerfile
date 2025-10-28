@@ -36,13 +36,18 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # Install Node.js dependencies and build assets
 RUN npm install && npm run build
 
-# Generate Swagger documentation at build time and include it in the image
-# This ensures the deployed image serves the current API docs without relying on runtime generation.
-RUN php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force || true && \
-    php artisan l5-swagger:generate || true && \
-    mkdir -p public/vendor/swagger-api/swagger-ui/dist && \
+# Ensure the build uses the committed `public/swagger.json` when present.
+# If not present, fall back to generating docs during build.
+RUN mkdir -p public/vendor/swagger-api/swagger-ui/dist && \
     cp -r vendor/swagger-api/swagger-ui/dist/* public/vendor/swagger-api/swagger-ui/dist/ 2>/dev/null || true && \
-    cp storage/api-docs/swagger.json public/swagger.json || true
+    if [ -f public/swagger.json ]; then \
+        echo "Using committed public/swagger.json"; \
+    else \
+        echo "No committed public/swagger.json found — generating documentation at build time"; \
+        php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider" --force || true && \
+        php artisan l5-swagger:generate || true && \
+        cp storage/api-docs/swagger.json public/swagger.json || true; \
+    fi
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
