@@ -35,7 +35,7 @@ use Illuminate\Validation\Rule;
  * )
  *
  * @OA\Server(
- *     url="http://localhost:8000/api/v1",
+ *     url="http://127.0.0.1:3000/api",
  *     description="Development server"
  * )
  *
@@ -48,8 +48,8 @@ use Illuminate\Validation\Rule;
  * )
  *
  * @OA\Tag(
- *     name="Authentication",
- *     description="User authentication endpoints"
+ *     name="Authentification",
+ *     description="User authentification endpoints"
  * )
  *
  * @OA\Tag(

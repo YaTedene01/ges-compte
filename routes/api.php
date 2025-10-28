@@ -15,9 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
-    // Note: authentication removed per request — account endpoints are public
-    // Account management routes (public)
-    Route::resource('accounts', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['accounts' => 'numero']);
-    Route::patch('accounts/{numero}/block', [App\Http\Controllers\Api\V1\CompteController::class, 'bloquer']);
-    Route::patch('accounts/{numero}/unblock', [App\Http\Controllers\Api\V1\CompteController::class, 'debloquer']);
+    // Authentication routes
+    // Authentication routes removed (login/refresh/logout) to disable API auth
+
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+
+        // Account management routes
+        Route::resource('accounts', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['accounts' => 'numero']);
+        Route::patch('accounts/{numero}/block', [App\Http\Controllers\Api\V1\CompteController::class, 'bloquer']);
+        Route::patch('accounts/{numero}/unblock', [App\Http\Controllers\Api\V1\CompteController::class, 'debloquer']);
+    });
 });

@@ -36,7 +36,7 @@ class AuthController extends Controller
      *     path="/v1/authentication/login",
      *     summary="User login",
      *     description="Authenticates a user and returns an access token",
-     *     tags={"Authentication"},
+    *     tags={"Authentification"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/LoginRequest")
@@ -107,7 +107,7 @@ class AuthController extends Controller
      *     path="/v1/authentication/refresh",
      *     summary="Refresh access token",
      *     description="Generates a new access token using the refresh token",
-     *     tags={"Authentication"},
+    *     tags={"Authentification"},
      *     @OA\Response(
      *         response=200,
      *         description="Token refreshed successfully",
@@ -156,7 +156,7 @@ class AuthController extends Controller
      *     path="/v1/authentication/logout",
      *     summary="User logout",
      *     description="Revokes the current user's access token",
-     *     tags={"Authentication"},
+    *     tags={"Authentification"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Response(
      *         response=200,

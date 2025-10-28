@@ -14,52 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return response()->json(['message' => 'API is running', 'docs' => 'https://ges-compte.onrender.com/docs']);
+    return response()->json(['message' => 'API is running', 'docs' => 'http://127.0.0.1:3000/api/documentation']);
 });
 
-// Swagger documentation routes
-Route::get('/docs', function () {
-    $documentation = 'default';
-    $urlToDocs = 'https://ges-compte.onrender.com/api/documentation';
-    $configUrl = config('l5-swagger.defaults.additional_config_url');
-    $validatorUrl = config('l5-swagger.defaults.validator_url');
-    $operationsSorter = config('l5-swagger.defaults.operations_sort');
-    $useAbsolutePath = config('l5-swagger.documentations.'.$documentation.'.paths.use_absolute_path', false);
-
-    return view('vendor.l5-swagger.index', compact(
-        'documentation',
-        'urlToDocs',
-        'configUrl',
-        'validatorUrl',
-        'operationsSorter',
-        'useAbsolutePath'
-    ));
-});
-
-// Add missing Swagger routes
-Route::get('/docs/{file}', function ($file) {
-    $path = storage_path('api-docs/' . $file);
-    if (file_exists($path)) {
-        return response()->file($path);
-    }
-    abort(404);
-})->where('file', '.*');
-
-// Add the missing l5-swagger route
-Route::get('/docs', function () {
-    $documentation = 'default';
-    $urlToDocs = url('/api/documentation');
-    $configUrl = config('l5-swagger.defaults.additional_config_url');
-    $validatorUrl = config('l5-swagger.defaults.validator_url');
-    $operationsSorter = config('l5-swagger.defaults.operations_sort');
-    $useAbsolutePath = config('l5-swagger.documentations.'.$documentation.'.paths.use_absolute_path', false);
-
-    return view('vendor.l5-swagger.index', compact(
-        'documentation',
-        'urlToDocs',
-        'configUrl',
-        'validatorUrl',
-        'operationsSorter',
-        'useAbsolutePath'
-    ));
-})->name('l5-swagger.default.docs');
+// Swagger documentation routes are provided by the l5-swagger package.
+// Do not override the package routes here to avoid serving the UI at the docs endpoint.
+// The package registers:
+//  - route 'l5-swagger.default.api' (UI) at /api/documentation
+//  - route 'l5-swagger.default.docs' (json/yaml docs) at /docs/{file}
+// If you need a custom entrypoint, create a redirect to the named route instead of rendering the view.

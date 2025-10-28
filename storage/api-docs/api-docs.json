@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Bank Account Management API",
-        "description": "API for managing bank accounts",
+        "title": "API de gestion des comptes bancaires",
+        "description": "API pour gérer les comptes bancaires",
         "contact": {
             "name": "Faye Yatedene",
             "email": "faye.yatedene@example.com"
@@ -12,11 +12,11 @@
     "servers": [
         {
             "url": "https://ges-compte.onrender.com/api/v1",
-            "description": "Production server"
+            "description": "Serveur de production"
         },
         {
-            "url": "http://localhost:8000/api/v1",
-            "description": "Development server"
+            "url": "http://127.0.0.1:3000/api",
+            "description": "Serveur de développement"
         },
         {
             "url": "/api/v1"
@@ -26,10 +26,10 @@
         "/v1/authentication/login": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Authentification"
                 ],
-                "summary": "User login",
-                "description": "Authenticates a user and returns an access token",
+                "summary": "Connexion utilisateur",
+                "description": "Authentifie un utilisateur et renvoie un jeton d'accès",
                 "operationId": "f8b21f278a93ec5f570450985b0f54e3",
                 "requestBody": {
                     "required": true,
@@ -43,7 +43,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login successful",
+                        "description": "Connexion réussie",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -53,7 +53,7 @@
                         }
                     },
                     "401": {
-                        "description": "Invalid credentials",
+                        "description": "Identifiants invalides",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -70,7 +70,7 @@
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Invalid credentials"
+                                                    "example": "Identifiants invalides"
                                                 },
                                                 "timestamp": {
                                                     "type": "string",
@@ -97,14 +97,14 @@
         "/v1/authentication/refresh": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Authentification"
                 ],
-                "summary": "Refresh access token",
-                "description": "Generates a new access token using the refresh token",
+                "summary": "Actualiser le jeton d'accès",
+                "description": "Génère un nouveau jeton d'accès en utilisant le jeton d'actualisation",
                 "operationId": "e2dbdd2167289a88d167618805ced1ad",
                 "responses": {
                     "200": {
-                        "description": "Token refreshed successfully",
+                        "description": "Jeton actualisé avec succès",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -114,7 +114,7 @@
                         }
                     },
                     "401": {
-                        "description": "Missing or invalid refresh token",
+                        "description": "Jeton d'actualisation manquant ou invalide",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -131,7 +131,7 @@
                                                 },
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "No refresh token"
+                                                    "example": "Jeton d'actualisation manquant"
                                                 },
                                                 "timestamp": {
                                                     "type": "string",
@@ -158,14 +158,14 @@
         "/v1/authentication/logout": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Authentification"
                 ],
-                "summary": "User logout",
-                "description": "Revokes the current user's access token",
+                "summary": "Déconnexion utilisateur",
+                "description": "Révoque le jeton d'accès de l'utilisateur actuel",
                 "operationId": "39619ff291ed512ab58391ed7bbfdb01",
                 "responses": {
                     "200": {
-                        "description": "Logout successful",
+                        "description": "Déconnexion réussie",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -176,7 +176,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Logged out"
+                                            "example": "Déconnecté"
                                         }
                                     },
                                     "type": "object"
@@ -234,16 +234,16 @@
         "/v1/accounts": {
             "get": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "List accounts",
-                "description": "Retrieve a list of accounts with filters and pagination",
+                "summary": "Liste des comptes",
+                "description": "Récupère la liste des comptes avec filtres et pagination",
                 "operationId": "10c99bb2a3bd576ac643a52e4b535587",
                 "parameters": [
                     {
                         "name": "type",
                         "in": "query",
-                        "description": "Account type",
+                        "description": "Type de compte",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -252,7 +252,7 @@
                     {
                         "name": "statut",
                         "in": "query",
-                        "description": "Account status",
+                        "description": "Statut du compte",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -261,7 +261,7 @@
                     {
                         "name": "search",
                         "in": "query",
-                        "description": "Search by holder name or account number",
+                        "description": "Recherche par nom du titulaire ou numéro de compte",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -270,7 +270,7 @@
                     {
                         "name": "sort",
                         "in": "query",
-                        "description": "Sort field",
+                        "description": "Champ de tri",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -280,7 +280,7 @@
                     {
                         "name": "order",
                         "in": "query",
-                        "description": "Sort order",
+                        "description": "Ordre de tri",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -294,7 +294,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Items per page",
+                        "description": "Éléments par page",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -381,9 +381,9 @@
             },
             "post": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Create a new account",
+                "summary": "Créer un compte",
                 "description": "Create a new bank account with client verification",
                 "operationId": "e30bc90c822ccc7bfeb79e51c52bb81a",
                 "requestBody": {
@@ -528,9 +528,9 @@
         "/v1/accounts/{numero}": {
             "get": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Get specific account",
+                "summary": "Détails du compte",
                 "description": "Retrieve details of a specific account by its number",
                 "operationId": "240f8399c3f3b47e357b4eea55b5f165",
                 "parameters": [
@@ -603,9 +603,9 @@
             },
             "delete": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Delete account",
+                "summary": "Supprimer un compte",
                 "description": "Soft delete an account, change status to 'ferme' and delete associated transactions",
                 "operationId": "a16d1e5a225992d32310c964e421bed3",
                 "parameters": [
@@ -682,9 +682,9 @@
             },
             "patch": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Update account",
+                "summary": "Mettre à jour un compte",
                 "description": "Update account and associated client information",
                 "operationId": "eefceee1d3d62f8a746874e9060875e3",
                 "parameters": [
@@ -811,9 +811,9 @@
         "/v1/accounts/{numero}/block": {
             "patch": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Block account",
+                "summary": "Bloquer un compte",
                 "description": "Block an active account and calculate blocking dates",
                 "operationId": "e838c8273f4dc44cf580c15880a87c0c",
                 "parameters": [
@@ -967,9 +967,9 @@
         "/v1/accounts/{numero}/unblock": {
             "patch": {
                 "tags": [
-                    "Accounts"
+                    "Comptes"
                 ],
-                "summary": "Unblock account",
+                "summary": "Débloquer un compte",
                 "description": "Unblock a blocked account",
                 "operationId": "8e6e7dda1b74c5333e8b7917e1c0d141",
                 "parameters": [
@@ -1088,6 +1088,148 @@
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Authentification utilisateur",
+                "operationId": "535ffeda4b78916efd658b2844ea897a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Identifiants invalides"
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Inscription d'un nouvel utilisateur",
+                "operationId": "da8643013c2941f5ed7f8a9c9b4a7f7a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur créé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Déconnexion de l'utilisateur",
+                "operationId": "46f8a14c8083abb69eed72768aa08629",
+                "responses": {
+                    "200": {
+                        "description": "Déconnexion réussie"
+                    },
+                    "401": {
+                        "description": "Non authentifié"
                     }
                 },
                 "security": [
@@ -1315,12 +1457,12 @@
     },
     "tags": [
         {
-            "name": "Authentication",
-            "description": "User authentication endpoints"
+            "name": "Authentification",
+            "description": "endpoints d'authentification utilisateur"
         },
         {
-            "name": "Accounts",
-            "description": "Bank account management endpoints"
+            "name": "Comptes",
+            "description": "endpoints de gestion des comptes bancaires"
         }
     ],
     "externalDocs": {
