@@ -1,57 +1,110 @@
-<!-- HTML for static distribution bundle build --><!DOCTYPE html>
+<!DOCTYPE html><!-- HTML for static distribution bundle build --><!DOCTYPE html>
 
-<!DOCTYPE html><html lang="en">
+<html lang="en">
 
-<html lang="en"><head>
+<head><!DOCTYPE html><html lang="en">
 
-<head>    <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-    <meta charset="UTF-8">    <title>{{config('l5-swagger.documentations.'.$documentation.'.api.title')}}</title>
+    <title>{{ config('l5-swagger.documentations.'.$documentation.'.api.title') }}</title><html lang="en"><head>
 
-    <title>{{config('l5-swagger.documentations.'.$documentation.'.api.title')}}</title>    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/swagger-api/swagger-ui/dist/swagger-ui.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/swagger-ui.min.css">
 
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/swagger-ui.min.css">    <link rel="icon" type="image/png" href="{{ asset('vendor/swagger-api/swagger-ui/dist/favicon-32x32.png') }}" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/favicon-32x32.png" sizes="32x32"/><head>    <meta charset="UTF-8">
 
-    <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/favicon-32x32.png" sizes="32x32"/>    <link rel="icon" type="image/png" href="{{ asset('vendor/swagger-api/swagger-ui/dist/favicon-16x16.png') }}" sizes="16x16"/>
+    <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/favicon-16x16.png" sizes="16x16"/>
 
-    <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/favicon-16x16.png" sizes="16x16"/>    <style>
+    <style>    <meta charset="UTF-8">    <title>{{config('l5-swagger.documentations.'.$documentation.'.api.title')}}</title>
 
-    <style>    html
+        html {
 
-        html {    {
+            box-sizing: border-box;    <title>{{config('l5-swagger.documentations.'.$documentation.'.api.title')}}</title>    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/swagger-api/swagger-ui/dist/swagger-ui.css') }}">
 
-            box-sizing: border-box;        box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
 
-            overflow: -moz-scrollbars-vertical;        overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/swagger-ui.min.css">    <link rel="icon" type="image/png" href="{{ asset('vendor/swagger-api/swagger-ui/dist/favicon-32x32.png') }}" sizes="32x32"/>
 
-            overflow-y: scroll;        overflow-y: scroll;
+        }
 
-        }    }
+        *,    <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/favicon-32x32.png" sizes="32x32"/>    <link rel="icon" type="image/png" href="{{ asset('vendor/swagger-api/swagger-ui/dist/favicon-16x16.png') }}" sizes="16x16"/>
 
-        *,    *,
+        *:before,
 
-        *:before,    *:before,
+        *:after {    <link rel="icon" type="image/png" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/favicon-16x16.png" sizes="16x16"/>    <style>
 
-        *:after {    *:after
+            box-sizing: inherit;
 
-            box-sizing: inherit;    {
+        }    <style>    html
 
-        }        box-sizing: inherit;
+        body {
 
-        body {    }
+            margin: 0;        html {    {
 
-            margin:0;
+            background: #fafafa;
 
-            background: #fafafa;    body {
-
-        }      margin:0;
-
-    </style>      background: #fafafa;
-
-</head>    }
+        }            box-sizing: border-box;        box-sizing: border-box;
 
     </style>
 
+</head>            overflow: -moz-scrollbars-vertical;        overflow: -moz-scrollbars-vertical;
+
+<body>
+
+<div id="swagger-ui"></div>            overflow-y: scroll;        overflow-y: scroll;
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/swagger-ui-bundle.min.js"></script>        }    }
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/swagger-ui-standalone-preset.min.js"></script>
+
+<script>        *,    *,
+
+    window.onload = function() {
+
+        // Begin Swagger UI call region        *:before,    *:before,
+
+        const ui = SwaggerUIBundle({
+
+            url: "{{ url('/docs/swagger.json') }}",        *:after {    *:after
+
+            dom_id: '#swagger-ui',
+
+            deepLinking: true,            box-sizing: inherit;    {
+
+            presets: [
+
+                SwaggerUIBundle.presets.apis,        }        box-sizing: inherit;
+
+                SwaggerUIStandalonePreset
+
+            ],        body {    }
+
+            plugins: [
+
+                SwaggerUIBundle.plugins.DownloadUrl            margin:0;
+
+            ],
+
+            layout: "StandaloneLayout",            background: #fafafa;    body {
+
+            docExpansion: "none",
+
+            persistAuthorization: true        }      margin:0;
+
+        });
+
+        // End Swagger UI call region    </style>      background: #fafafa;
+
+        window.ui = ui;
+
+    };</head>    }
+
+</script>
+
+</body>    </style>
+
+</html>
 <body>    @if(config('l5-swagger.defaults.ui.display.dark_mode'))
 
 <div id="swagger-ui"></div>        <style>
