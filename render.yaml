@@ -23,7 +23,7 @@ services:
       - key: DB_PASSWORD
         fromSecret: db-password
       - key: L5_SWAGGER_GENERATE_ALWAYS
-        value: true
+        value: false
       - key: L5_SWAGGER_USE_ABSOLUTE_PATH
         value: true
       - key: L5_SWAGGER_UI_ASSETS_URL
@@ -35,7 +35,7 @@ services:
       - key: L5_SWAGGER_BASE_PATH
         value: /api
       - key: LOG_CHANNEL
-        value: null
+        value: stack
       - key: SESSION_DRIVER
         value: array
       - key: CACHE_DRIVER

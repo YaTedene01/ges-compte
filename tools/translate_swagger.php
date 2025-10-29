@@ -72,7 +72,7 @@ $mapping = [
     'Application server' => 'Serveur applicatif',
 
     // Tag and docs
-    'Bank account management endpoints' => "Points de terminaison de gestion des comptes bancaires",
+    'Bank account management endpoints' => "endpoint de gestion des comptes bancaires",
     'API Documentation' => "Documentation de l'API",
 
     // Parameter/header descriptions

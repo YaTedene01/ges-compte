@@ -873,7 +873,7 @@
     "tags": [
         {
             "name": "Comptes",
-            "description": "Points de terminaison de gestion des comptes bancaires"
+            "description": "endpoint de gestion des comptes bancaires"
         }
     ],
     "externalDocs": {
