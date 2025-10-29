@@ -42,6 +42,8 @@ services:
         value: array
       - key: VIEW_COMPILED_PATH
         value: /tmp/laravel-views
+      - key: RUN_SEEDERS
+        value: "true"
     secrets:
       - key: app-url
         value: https://ges-compte.onrender.com/api/documentation
@@ -58,5 +60,10 @@ services:
     buildCommand: |
       composer install --no-dev --optimize-autoloader
       composer run-script generate-swagger
-      php artisan migrate --force
+      # Run migrations; run seeders only when RUN_SEEDERS is set to "true"
+      if [ "${RUN_SEEDERS:-false}" = "true" ]; then
+        php artisan migrate --force --seed
+      else
+        php artisan migrate --force
+      fi
     startCommand: php artisan serve --host 0.0.0.0 --port 10000
