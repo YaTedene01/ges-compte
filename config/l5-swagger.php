@@ -19,13 +19,19 @@ return [
                 /*
                  * Edit to include full URL in ui for assets
                  */
-                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+                    // Use absolute paths in production by default. Can be overridden by env var.
+                    'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', env('APP_ENV') === 'production' ? true : false),
 
                 /*
                 * Edit to set path where swagger ui assets should be stored
                 */
                 'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
-
+                /*
+                 * URL to load Swagger UI assets from. Defaults to the CDN to avoid
+                 * serving sourcemaps / assets locally in production (prevents 500s
+                 * or mixed-content when DebugBar or local assets are incorrectly served).
+                 */
+                'swagger_ui_assets_url' => env('L5_SWAGGER_UI_ASSETS_URL', 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.10.3/'),
                 /*
                  * File name of the generated json documentation file
                  */

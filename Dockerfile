@@ -30,8 +30,9 @@ WORKDIR /var/www/html
 # Copy existing application directory contents
 COPY . /var/www/html
 
-# Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Install PHP dependencies (no dev packages in production image)
+# Use --no-dev so dev-only packages like barryvdh/laravel-debugbar are not installed in the image
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 # Install Node.js dependencies and build assets
 RUN npm install && npm run build

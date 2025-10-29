@@ -1,3 +1,15 @@
+vendor/
+node_modules/
+.env
+storage/framework/
+storage/logs/
+public/storage/
+.git/
+.github/
+tests/
+composer.lock
+npm-debug.log
+yarn-error.log
 .git
 .gitignore
 README.md
