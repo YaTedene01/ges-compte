@@ -38,6 +38,11 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
+        "generate-swagger": [
+            "@php artisan l5-swagger:generate",
+            "@php tools/translate_swagger.php",
+            "@php -r \"copy('storage/api-docs/swagger.json', 'public/swagger.json');\""
+        ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],

@@ -22,52 +22,54 @@ $mapping = [
     'Accounts' => 'Comptes',
     'List accounts' => 'Lister les comptes',
     'Retrieve a list of accounts with filters and pagination' => 'Récupère la liste des comptes avec filtres et pagination',
+
+    // Parameters / filters
     'Account type' => 'Type de compte',
     'Account status' => 'Statut du compte',
     'Search by holder name or account number' => 'Recherche par nom du titulaire ou numéro de compte',
     'Sort field' => 'Champ de tri',
     'Sort order' => 'Ordre de tri',
     'Items per page' => 'Éléments par page',
-    'List of accounts' => 'Liste des comptes',
 
-    // Common words (do NOT translate JSON property keys like "success"/"data")
-    'success' => 'success',
-
-    // Specific endpoints — translate summaries/descriptions and examples
+    // CRUD summaries and descriptions
     'Create a new account' => 'Créer un nouveau compte',
     'Create a new bank account with client verification' => 'Créer un nouveau compte bancaire avec vérification du client',
-    'Account created successfully' => 'Compte créé avec succès',
-    'Account deleted successfully' => 'Compte supprimé avec succès',
-    'Account details' => 'Détails du compte',
     'Get specific account' => 'Obtenir un compte spécifique',
+    'Retrieve details of a specific account by its number' => 'Récupère les détails d\'un compte spécifique par son numéro',
     'Delete account' => 'Supprimer le compte',
     'Update account' => 'Mettre à jour le compte',
-    'Account updated successfully' => 'Compte mis à jour avec succès',
 
+    // Responses / messages
+    'List of accounts' => 'Liste des comptes',
+    'Account details' => 'Détails du compte',
+    'Account created successfully' => 'Compte créé avec succès',
+    'Account updated successfully' => 'Compte mis à jour avec succès',
+    'Account deleted successfully' => 'Compte supprimé avec succès',
+
+    // Blocking endpoints
     'Block account' => 'Bloquer un compte',
     'Unblock account' => 'Débloquer un compte',
-    'Account blocked successfully' => 'Compte bloqué avec succès',
-    'Account unblocked successfully' => 'Compte débloqué avec succès',
-
     'Block an active account and calculate blocking dates' => 'Bloquer un compte actif et calculer les dates de blocage',
     'Unblock a blocked account' => 'Débloquer un compte bloqué',
-
     'Suspicious activity detected' => 'Activité suspecte détectée',
     'Verification completed' => 'Vérification terminée',
 
-    // Errors / validation / messages
+    // Error and validation
     'error' => 'erreur',
     'Invalid request' => 'Requête invalide',
     'Invalid data' => 'Données invalides',
-    'Not found' => 'Non trouvé',
+    'Validation error' => 'Erreur de validation',
+    'Validation failed' => 'La validation a échoué',
     'Account not found' => 'Compte non trouvé',
     'Account not active or invalid data' => 'Compte non actif ou données invalides',
     'Account not blocked' => 'Compte non bloqué',
     'Unauthorized' => 'Non autorisé',
-    'Too Many Requests' => 'Trop de requêtes',
     'Too many requests' => 'Trop de requêtes',
-    'Validation failed' => 'La validation a échoué',
-    'Validation erreur' => 'Erreur de validation',
+    'Not found' => 'Non trouvé',
+
+    // Misc common phrases
+    'Account number' => 'Numéro de compte',
+    'Application server' => 'Serveur applicatif',
 
     // Tag and docs
     'Bank account management endpoints' => "Points de terminaison de gestion des comptes bancaires",
@@ -79,8 +81,6 @@ $mapping = [
     'Language preference' => 'Préférence de langue',
     'Unique request identifier' => 'Identifiant unique de requête',
     'API version' => "Version de l'API",
-
-    // Misc examples
 ];
 
 $json = file_get_contents($storageSwagger);

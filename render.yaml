@@ -7,7 +7,7 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: true
+        value: false
       - key: APP_URL
         fromSecret: app-url
       - key: DB_CONNECTION
@@ -33,7 +33,7 @@ services:
       - key: L5_SWAGGER_CONST_HOST
         value: https://ges-compte.onrender.com
       - key: L5_SWAGGER_BASE_PATH
-        value: /api/v1
+        value: /api
       - key: LOG_CHANNEL
         value: null
       - key: SESSION_DRIVER
@@ -55,3 +55,8 @@ services:
         value: YOUR_DB_USERNAME
       - key: db-password
         value: YOUR_DB_PASSWORD
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      composer run-script generate-swagger
+      php artisan migrate --force
+    startCommand: php artisan serve --host 0.0.0.0 --port 10000

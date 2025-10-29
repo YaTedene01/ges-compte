@@ -251,7 +251,7 @@
                         "description": "Données invalides"
                     },
                     "422": {
-                        "description": "Erreur de validation"
+                        "description": "Validation erreur"
                     },
                     "429": {
                         "description": "Trop de requêtes"
@@ -265,13 +265,13 @@
                     "Comptes"
                 ],
                 "summary": "Obtenir un compte spécifique",
-                "description": "Retrieve details of a specific account by its number",
+                "description": "Récupère les détails d'un compte spécifique par son numéro",
                 "operationId": "240f8399c3f3b47e357b4eea55b5f165",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Numéro de compte",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -317,7 +317,7 @@
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Numéro de compte",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -367,7 +367,7 @@
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Numéro de compte",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -440,7 +440,7 @@
                         "description": "Compte non trouvé"
                     },
                     "422": {
-                        "description": "Erreur de validation"
+                        "description": "Validation erreur"
                     },
                     "429": {
                         "description": "Trop de requêtes"
@@ -460,7 +460,7 @@
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Numéro de compte",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -504,7 +504,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Compte bloqué avec succès",
+                        "description": "Account blocked successfully",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -515,7 +515,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Compte bloqué avec succès"
+                                            "example": "Account blocked successfully"
                                         },
                                         "data": {
                                             "properties": {
@@ -567,7 +567,7 @@
                         }
                     },
                     "422": {
-                        "description": "Erreur de validation",
+                        "description": "Validation erreur",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -601,7 +601,7 @@
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Numéro de compte",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -629,7 +629,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Compte débloqué avec succès",
+                        "description": "Account unblocked successfully",
                         "content": {
                             "application\/json": {
                                 "schema": {
@@ -640,7 +640,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Compte débloqué avec succès"
+                                            "example": "Account unblocked successfully"
                                         },
                                         "data": {
                                             "properties": {
@@ -685,7 +685,7 @@
                         }
                     },
                     "422": {
-                        "description": "Erreur de validation",
+                        "description": "Validation erreur",
                         "content": {
                             "application\/json": {
                                 "schema": {
