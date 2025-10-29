@@ -15,17 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
-    // Authentication routes
-    // Authentication routes removed (login/refresh/logout) to disable API auth
-
-    Route::middleware('auth:api')->group(function () {
-        Route::get('/user', function (Request $request) {
-            return $request->user();
-        });
-
-        // Account management routes
-        Route::resource('accounts', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['accounts' => 'numero']);
-        Route::patch('accounts/{numero}/block', [App\Http\Controllers\Api\V1\CompteController::class, 'bloquer']);
-        Route::patch('accounts/{numero}/unblock', [App\Http\Controllers\Api\V1\CompteController::class, 'debloquer']);
-    });
+    // Account management routes
+    Route::resource('accounts', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['accounts' => 'numero']);
+    Route::post('accounts/{numero}/bloquer', [App\Http\Controllers\Api\V1\CompteController::class, 'bloquer']);
+    Route::post('accounts/{numero}/debloquer', [App\Http\Controllers\Api\V1\CompteController::class, 'debloquer']);
 });

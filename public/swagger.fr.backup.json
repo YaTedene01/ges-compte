@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "API de gestion des comptes bancaires",
-        "description": "API pour gérer les comptes bancaires",
+        "description": "API pour g\u00e9rer les comptes bancaires",
         "contact": {
             "name": "Faye Yatedene",
             "email": "faye.yatedene@example.com"
@@ -11,25 +11,25 @@
     },
     "servers": [
         {
-            "url": "https:\/\/ges-compte.onrender.com\/api",
+            "url": "https://ges-compte.onrender.com/api/v1",
             "description": "Serveur de production"
         },
         {
-            "url": "http:\/\/127.0.0.1:3000\/api",
-            "description": "Serveur de développement"
+            "url": "http://127.0.0.1:3000/api",
+            "description": "Serveur de d\u00e9veloppement"
         },
         {
-            "url": "\/api\/v1"
+            "url": "/api/v1"
         }
     ],
     "paths": {
-        "\/v1\/accounts": {
+        "/v1/accounts": {
             "get": {
                 "tags": [
                     "Comptes"
                 ],
                 "summary": "Lister les comptes",
-                "description": "Récupère la liste des comptes avec filtres et pagination",
+                "description": "R\u00e9cup\u00e8re une Listeree de comptes avec filtres et pagination",
                 "operationId": "10c99bb2a3bd576ac643a52e4b535587",
                 "parameters": [
                     {
@@ -53,7 +53,7 @@
                     {
                         "name": "search",
                         "in": "query",
-                        "description": "Recherche par nom du titulaire ou numéro de compte",
+                        "description": "Rechercher par nom du titulaire ou num\u00e9ro de compte",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -86,7 +86,7 @@
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Éléments par page",
+                        "description": "\u00c9l\u00e9ments par page",
                         "required": false,
                         "schema": {
                             "type": "integer",
@@ -97,9 +97,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Liste des comptes",
+                        "description": "Lister comptes",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -109,7 +109,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#\/components\/schemas\/Account"
+                                                "$ref": "#/components/schemas/Compte"
                                             }
                                         },
                                         "pagination": {
@@ -145,7 +145,14 @@
                         }
                     },
                     "429": {
-                        "description": "Trop de requêtes"
+                        "description": "plusieurs requetes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -153,13 +160,13 @@
                 "tags": [
                     "Comptes"
                 ],
-                "summary": "Créer un nouveau compte",
-                "description": "Créer un nouveau compte bancaire avec vérification du client",
+                "summary": "Cr\u00e9er un nouveau compte",
+                "description": "Cr\u00e9er un nouveau compte bancaire avec v\u00e9rification du client",
                 "operationId": "e30bc90c822ccc7bfeb79e51c52bb81a",
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "type",
@@ -225,9 +232,9 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Compte créé avec succès",
+                        "description": "Compte cr\u00e9\u00e9 avec succ\u00e8s",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -236,10 +243,10 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Compte créé avec succès"
+                                            "example": "Compte cr\u00e9\u00e9 avec succ\u00e8s"
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -248,30 +255,51 @@
                         }
                     },
                     "400": {
-                        "description": "Données invalides"
+                        "description": "Invalid data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Erreur de validation"
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     },
                     "429": {
-                        "description": "Trop de requêtes"
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "\/v1\/accounts\/{numero}": {
+        "/v1/accounts/{numero}": {
             "get": {
                 "tags": [
                     "Comptes"
                 ],
-                "summary": "Obtenir un compte spécifique",
-                "description": "Retrieve details of a specific account by its number",
+                "summary": "Obtenir un compte sp\u00e9cifique",
+                "description": "R\u00e9cup\u00e8re les d\u00e9tails d'un compte sp\u00e9cifique par son num\u00e9ro",
                 "operationId": "240f8399c3f3b47e357b4eea55b5f165",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -280,9 +308,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Détails du compte",
+                        "description": "Compte details",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -290,7 +318,7 @@
                                             "example": true
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -299,10 +327,24 @@
                         }
                     },
                     "404": {
-                        "description": "Compte non trouvé"
+                        "description": "Compte not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     },
                     "429": {
-                        "description": "Trop de requêtes"
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -310,14 +352,14 @@
                 "tags": [
                     "Comptes"
                 ],
-                "summary": "Supprimer le compte",
-                "description": "Soft delete an account, change status to 'ferme' and delete associated transactions",
+                "summary": "Supprimer un compte",
+                "description": "Suppression logique d'un compte : changer le statut en 'ferme' et supprimer les transactions associ\u00e9es",
                 "operationId": "a16d1e5a225992d32310c964e421bed3",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -326,9 +368,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Compte supprimé avec succès",
+                        "description": "Compte supprim\u00e9 avec succ\u00e8s",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -337,10 +379,10 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Compte supprimé avec succès"
+                                            "example": "Compte supprim\u00e9 avec succ\u00e8s"
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -349,10 +391,24 @@
                         }
                     },
                     "404": {
-                        "description": "Compte non trouvé"
+                        "description": "Compte not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     },
                     "429": {
-                        "description": "Trop de requêtes"
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -360,14 +416,14 @@
                 "tags": [
                     "Comptes"
                 ],
-                "summary": "Mettre à jour le compte",
-                "description": "Mettre à jour le compte and associated client information",
+                "summary": "Mettre \u00e0 jour le compte",
+                "description": "Met \u00e0 jour le compte et les informations client associ\u00e9es",
                 "operationId": "eefceee1d3d62f8a746874e9060875e3",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -377,7 +433,7 @@
                 "requestBody": {
                     "required": false,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "properties": {
                                     "titulaire": {
@@ -397,7 +453,7 @@
                                             },
                                             "password": {
                                                 "type": "string",
-                                                "example": "newpassword123"
+                                                "example": "newmot de passe123"
                                             },
                                             "nci": {
                                                 "type": "string",
@@ -414,9 +470,9 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Compte mis à jour avec succès",
+                        "description": "Compte mis \u00e0 jour avec succ\u00e8s",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -425,10 +481,10 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Compte mis à jour avec succès"
+                                            "example": "Compte mis \u00e0 jour avec succ\u00e8s"
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Compte"
                                         }
                                     },
                                     "type": "object"
@@ -437,30 +493,51 @@
                         }
                     },
                     "404": {
-                        "description": "Compte non trouvé"
+                        "description": "Compte not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Erreur de validation"
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     },
                     "429": {
-                        "description": "Trop de requêtes"
+                        "description": "Too many requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "\/v1\/accounts\/{numero}\/bloquer": {
+        "/v1/accounts/{numero}/bloquer": {
             "post": {
                 "tags": [
                     "Comptes"
                 ],
-                "summary": "Bloquer un compte",
+                "summary": "Bloquer le compte",
                 "description": "Bloquer un compte actif et calculer les dates de blocage",
-                "operationId": "73ab56ae9a95991b418c1a682915eaf2",
+                "operationId": "e838c8273f4dc44cf580c15880a87c0c",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -470,7 +547,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "motif",
@@ -480,7 +557,7 @@
                                 "properties": {
                                     "motif": {
                                         "type": "string",
-                                        "example": "Activité suspecte détectée"
+                                        "example": "Suspicious activity detected"
                                     },
                                     "duree": {
                                         "type": "integer",
@@ -504,9 +581,9 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Compte bloqué avec succès",
+                        "description": "Compte Bloquered successfully",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -515,7 +592,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Compte bloqué avec succès"
+                                            "example": "Compte Bloquered successfully"
                                         },
                                         "data": {
                                             "properties": {
@@ -547,41 +624,41 @@
                         }
                     },
                     "400": {
-                        "description": "Compte non actif ou données invalides",
+                        "description": "Compte not active or invalid data",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Compte non trouvé",
+                        "description": "Compte not found",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     },
                     "422": {
-                        "description": "Erreur de validation",
+                        "description": "Validation error",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     },
                     "429": {
-                        "description": "Trop de requêtes",
+                        "description": "Too many requests",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
                                 }
                             }
                         }
@@ -589,19 +666,19 @@
                 }
             }
         },
-        "\/v1\/accounts\/{numero}\/debloquer": {
+        "/v1/accounts/{numero}/debloquer": {
             "post": {
                 "tags": [
                     "Comptes"
                 ],
-                "summary": "Débloquer un compte",
-                "description": "Débloquer un compte bloqué",
-                "operationId": "1f1afb6b6fe191dcb033bd5c8ab8809c",
+                "summary": "D\u00e9bloquer le compte",
+                "description": "D\u00e9bloquer un compte bloqu\u00e9",
+                "operationId": "8e6e7dda1b74c5333e8b7917e1c0d141",
                 "parameters": [
                     {
                         "name": "numero",
                         "in": "path",
-                        "description": "Account number",
+                        "description": "Compte number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -611,7 +688,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "motif"
@@ -619,7 +696,7 @@
                                 "properties": {
                                     "motif": {
                                         "type": "string",
-                                        "example": "Vérification terminée"
+                                        "example": "Verification completed"
                                     }
                                 },
                                 "type": "object"
@@ -629,9 +706,9 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Compte débloqué avec succès",
+                        "description": "Compte unBloquered successfully",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -640,7 +717,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Compte débloqué avec succès"
+                                            "example": "Compte unBloquered successfully"
                                         },
                                         "data": {
                                             "properties": {
@@ -665,41 +742,41 @@
                         }
                     },
                     "400": {
-                        "description": "Compte non bloqué",
+                        "description": "Compte not Bloquered",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Compte non trouvé",
+                        "description": "Compte not found",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     },
                     "422": {
-                        "description": "Erreur de validation",
+                        "description": "Validation error",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
                     },
                     "429": {
-                        "description": "Trop de requêtes",
+                        "description": "Too many requests",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorR\u00e9ponse"
                                 }
                             }
                         }
@@ -789,12 +866,12 @@
                             },
                             "message": {
                                 "type": "string",
-                                "example": "La validation a échoué"
+                                "example": "Validation failed"
                             },
                             "details": {
                                 "type": "object",
                                 "example": {
-                                    "field": "erreur message"
+                                    "field": "error message"
                                 }
                             },
                             "timestamp": {
@@ -804,7 +881,7 @@
                             },
                             "path": {
                                 "type": "string",
-                                "example": "\/api\/v1\/accounts"
+                                "example": "/api/v1/comptes"
                             },
                             "traceId": {
                                 "type": "string",
@@ -815,33 +892,36 @@
                     }
                 },
                 "type": "object"
+            },
+            "ErrorR\u00e9ponse": {
+                "$ref": "#/components/schemas/ErrorResponse"
             }
         },
         "parameters": {
             "ContentTypeHeader": {
                 "name": "Content-Type",
                 "in": "header",
-                "description": "Type de contenu",
+                "description": "Content type",
                 "required": true,
                 "schema": {
                     "type": "string",
-                    "example": "application\/json"
+                    "example": "application/json"
                 }
             },
             "AcceptHeader": {
                 "name": "Accept",
                 "in": "header",
-                "description": "En-tête Accept",
+                "description": "Accept header",
                 "required": true,
                 "schema": {
                     "type": "string",
-                    "example": "application\/json"
+                    "example": "application/json"
                 }
             },
             "AcceptLanguageHeader": {
                 "name": "Accept-Language",
                 "in": "header",
-                "description": "Préférence de langue",
+                "description": "Language preference",
                 "required": false,
                 "schema": {
                     "type": "string",
@@ -851,7 +931,7 @@
             "RequestIdHeader": {
                 "name": "X-Request-ID",
                 "in": "header",
-                "description": "Identifiant unique de requête",
+                "description": "Unique request identifier",
                 "required": false,
                 "schema": {
                     "type": "string",
@@ -861,7 +941,7 @@
             "ApiVersionHeader": {
                 "name": "X-API-Version",
                 "in": "header",
-                "description": "Version de l'API",
+                "description": "API version",
                 "required": false,
                 "schema": {
                     "type": "string",
@@ -873,11 +953,11 @@
     "tags": [
         {
             "name": "Comptes",
-            "description": "Points de terminaison de gestion des comptes bancaires"
+            "description": "Bank compte management endpoints"
         }
     ],
     "externalDocs": {
-        "description": "Documentation de l'API",
-        "url": "https:\/\/example.com\/docs"
+        "description": "API Documentation",
+        "url": "https://example.com/docs"
     }
 }

@@ -44,7 +44,7 @@ services:
         value: /tmp/laravel-views
     secrets:
       - key: app-url
-        value: https://test-ges-compte-faye-yatedene.onrender.com
+        value: https://ges-compte.onrender.com/api/documentation
       - key: db-host
         value: YOUR_DB_HOST
       - key: db-port

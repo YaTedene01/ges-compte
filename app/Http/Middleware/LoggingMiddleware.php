@@ -16,7 +16,6 @@ class LoggingMiddleware
         $response = $next($request);
 
         Log::info('API Operation', [
-            'user_id' => auth('api')->id(),
             'method' => $request->method(),
             'url' => $request->fullUrl(),
             'ip' => $request->ip(),

@@ -808,7 +808,7 @@
                 ]
             }
         },
-        "/v1/accounts/{numero}/block": {
+    "/v1/accounts/{numero}/bloquer": {
             "patch": {
                 "tags": [
                     "Comptes"
@@ -964,7 +964,7 @@
                 ]
             }
         },
-        "/v1/accounts/{numero}/unblock": {
+    "/v1/accounts/{numero}/debloquer": {
             "patch": {
                 "tags": [
                     "Comptes"

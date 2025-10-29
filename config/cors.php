@@ -15,17 +15,23 @@ return [
     |
     */
 
-    'paths' => ['api/*'],
+    // Allow CORS for API paths and generic requests. For testing we allow
+    // all origins/methods/headers. In production, narrow these settings.
+    'paths' => ['api/*', 'v1/*', 'sanctum/csrf-cookie', '*'],
 
-    'allowed_methods' => ['GET', 'POST', 'PATCH', 'DELETE'],
+    // Allow all HTTP methods (preflight will succeed).
+    'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://front.banque.example.com'],
+    // Allow all origins for now so Swagger UI and browser clients can call the API.
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['Authorization', 'Content-Type'],
+    // Allow all headers (including Accept, X-CSRF-TOKEN, Authorization, etc.).
+    'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    // Expose standard headers if needed by the client.
+    'exposed_headers' => ['X-RateLimit-Limit', 'X-RateLimit-Remaining'],
 
     'max_age' => 0,
 

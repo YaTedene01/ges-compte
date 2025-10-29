@@ -39,18 +39,7 @@ use Illuminate\Validation\Rule;
  *     description="Development server"
  * )
  *
- * @OA\SecurityScheme(
- *     securityScheme="bearerAuth",
- *     type="http",
- *     scheme="bearer",
- *     bearerFormat="JWT",
- *     description="JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'"
- * )
- *
- * @OA\Tag(
- *     name="Authentification",
- *     description="User authentification endpoints"
- * )
+ 
  *
  * @OA\Tag(
  *     name="Accounts",
@@ -94,14 +83,8 @@ use Illuminate\Validation\Rule;
  *     )
  * )
  *
- * @OA\Parameter(
- *     parameter="AuthorizationHeader",
- *     name="Authorization",
- *     in="header",
- *     required=true,
- *     description="JWT access token",
- *     @OA\Schema(type="string", example="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...")
- * )
+ 
+ 
  *
  * @OA\Parameter(
  *     parameter="ContentTypeHeader",
@@ -158,8 +141,7 @@ class CompteController extends Controller
       *     path="/v1/accounts",
       *     summary="List accounts",
       *     description="Retrieve a list of accounts with filters and pagination",
-      *     tags={"Accounts"},
-      *     security={{"bearerAuth": {}}},
+    *     tags={"Accounts"},
       *     @OA\Parameter(
       *         name="type",
       *         in="query",
@@ -220,14 +202,8 @@ class CompteController extends Controller
       *         )
       *     ),
       *     @OA\Response(
-      *         response=401,
-      *         description="Unauthorized",
-      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-      *     ),
-      *     @OA\Response(
       *         response=429,
-      *         description="Too many requests",
-      *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+      *         description="Too many requests"
       *     )
       * )
       */
@@ -268,7 +244,6 @@ class CompteController extends Controller
      *     summary="Create a new account",
      *     description="Create a new bank account with client verification",
      *     tags={"Accounts"},
-     *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -297,23 +272,15 @@ class CompteController extends Controller
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Invalid data",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Invalid data"
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Validation error"
      *     ),
      *     @OA\Response(
      *         response=429,
-     *         description="Too many requests",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Too many requests"
      *     )
      * )
      */
@@ -361,7 +328,6 @@ class CompteController extends Controller
      *     summary="Get specific account",
      *     description="Retrieve details of a specific account by its number",
      *     tags={"Accounts"},
-     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
@@ -378,19 +344,12 @@ class CompteController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
      *         response=404,
-     *         description="Account not found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Account not found"
      *     ),
      *     @OA\Response(
      *         response=429,
-     *         description="Too many requests",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Too many requests"
      *     )
      * )
      */
@@ -411,7 +370,6 @@ class CompteController extends Controller
      *     summary="Update account",
      *     description="Update account and associated client information",
      *     tags={"Accounts"},
-     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
@@ -441,24 +399,16 @@ class CompteController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
      *         response=404,
-     *         description="Account not found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Account not found"
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Validation error"
      *     ),
      *     @OA\Response(
      *         response=429,
-     *         description="Too many requests",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Too many requests"
      *     )
      * )
      */
@@ -561,7 +511,6 @@ class CompteController extends Controller
      *     summary="Delete account",
      *     description="Soft delete an account, change status to 'ferme' and delete associated transactions",
      *     tags={"Accounts"},
-     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
@@ -579,19 +528,12 @@ class CompteController extends Controller
      *         )
      *     ),
      *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
      *         response=404,
-     *         description="Account not found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Account not found"
      *     ),
      *     @OA\Response(
      *         response=429,
-     *         description="Too many requests",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+     *         description="Too many requests"
      *     )
      * )
      */
@@ -620,12 +562,11 @@ class CompteController extends Controller
     }
 
     /**
-     * @OA\Patch(
-     *     path="/v1/accounts/{numero}/block",
-     *     summary="Block account",
-     *     description="Block an active account and calculate blocking dates",
-     *     tags={"Accounts"},
-     *     security={{"bearerAuth": {}}},
+     * @OA\Post(
+    *     path="/v1/accounts/{numero}/bloquer",
+    *     summary="Block account",
+    *     description="Block an active account and calculate blocking dates",
+    *     tags={"Accounts"},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
@@ -657,31 +598,26 @@ class CompteController extends Controller
      *             )
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Account not active or invalid data",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Account not found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=429,
-     *         description="Too many requests",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     )
+    *     @OA\Response(
+    *         response=400,
+    *         description="Account not active or invalid data",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="Account not found",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     ),
+    *     @OA\Response(
+    *         response=422,
+    *         description="Validation error",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     ),
+    *     @OA\Response(
+    *         response=429,
+    *         description="Too many requests",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     )
      * )
      */
     public function bloquer(CompteBloquerRequest $request, string $numero)
@@ -716,12 +652,11 @@ class CompteController extends Controller
     }
 
     /**
-     * @OA\Patch(
-     *     path="/v1/accounts/{numero}/unblock",
-     *     summary="Unblock account",
-     *     description="Unblock a blocked account",
-     *     tags={"Accounts"},
-     *     security={{"bearerAuth": {}}},
+     * @OA\Post(
+    *     path="/v1/accounts/{numero}/debloquer",
+    *     summary="Unblock account",
+    *     description="Unblock a blocked account",
+    *     tags={"Accounts"},
      *     @OA\Parameter(
      *         name="numero",
      *         in="path",
@@ -749,31 +684,26 @@ class CompteController extends Controller
      *             )
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Account not blocked",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Account not found",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Validation error",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     ),
-     *     @OA\Response(
-     *         response=429,
-     *         description="Too many requests",
-     *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
-     *     )
+    *     @OA\Response(
+    *         response=400,
+    *         description="Account not blocked",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="Account not found",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     ),
+    *     @OA\Response(
+    *         response=422,
+    *         description="Validation error",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     ),
+    *     @OA\Response(
+    *         response=429,
+    *         description="Too many requests",
+    *         @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
+    *     )
      * )
      */
     public function debloquer(CompteDebloquerRequest $request, string $numero)
