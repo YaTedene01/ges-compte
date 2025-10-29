@@ -11,7 +11,7 @@
     },
     "servers": [
         {
-            "url": "https:\/\/ges-compte.onrender.com\/api\/v1",
+            "url": "https:\/\/ges-compte.onrender.com\/api",
             "description": "Serveur de production"
         },
         {
@@ -19,7 +19,7 @@
             "description": "Serveur de développement"
         },
         {
-            "url": "\/api\/v1"
+            "url": "\/api"
         }
     ],
     "paths": {
