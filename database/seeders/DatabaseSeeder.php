@@ -19,11 +19,25 @@ class DatabaseSeeder extends Seeder
          //     'email' => 'test@example.com',
          // ]);
 
-         $this->call([
-             UserSeeder::class,
-             ClientSeeder::class,
-             CompteSeeder::class,
-             TransactionSeeder::class,
-         ]);
+        // Seeders we intend to run (short names). We'll resolve to FQCN only if the class exists.
+        $shortSeeders = [
+            'UserSeeder',
+            'ClientSeeder',
+            'CompteSeeder',
+            'TransactionSeeder',
+            'AdminSeeder',
+        ];
+
+        $available = [];
+        foreach ($shortSeeders as $s) {
+            $fqcn = "Database\\Seeders\\{$s}";
+            if (class_exists($fqcn)) {
+                $available[] = $fqcn;
+            }
+        }
+
+        if (!empty($available)) {
+            $this->call($available);
+        }
     }
 }

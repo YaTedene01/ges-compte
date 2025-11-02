@@ -38,9 +38,9 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            // Use Passport for API authentication (requires laravel/passport)
+            'driver' => 'passport',
             'provider' => 'users',
-            'hash' => false,
         ],
     ],
 
@@ -58,7 +58,8 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            // Use Client model as the authenticatable user model for this application
+            'model' => App\Models\Client::class,
         ],
 
         // 'users' => [
