@@ -11,19 +11,19 @@
     },
     "servers": [
         {
-            "url": "https:\/\/ges-compte.onrender.com\/api",
+            "url": "https://ges-compte.onrender.com/api/v1",
             "description": "Serveur de production"
         },
         {
-            "url": "http:\/\/127.0.0.1:3000\/api",
+            "url": "http://127.0.0.1:3000/api",
             "description": "Serveur de développement"
         },
         {
-            "url": "\/api"
+            "url": "/api/v1"
         }
     ],
     "paths": {
-        "\/v1\/accounts": {
+        "/v1/accounts": {
             "get": {
                 "tags": [
                     "Comptes"
@@ -99,7 +99,7 @@
                     "200": {
                         "description": "Liste des comptes",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -109,7 +109,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#\/components\/schemas\/Account"
+                                                "$ref": "#/components/schemas/Account"
                                             }
                                         },
                                         "pagination": {
@@ -159,7 +159,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "type",
@@ -227,7 +227,7 @@
                     "201": {
                         "description": "Compte créé avec succès",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -239,7 +239,7 @@
                                             "example": "Compte créé avec succès"
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Account"
                                         }
                                     },
                                     "type": "object"
@@ -259,7 +259,7 @@
                 }
             }
         },
-        "\/v1\/accounts\/{numero}": {
+        "/v1/accounts/{numero}": {
             "get": {
                 "tags": [
                     "Comptes"
@@ -282,7 +282,7 @@
                     "200": {
                         "description": "Détails du compte",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -290,7 +290,7 @@
                                             "example": true
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Account"
                                         }
                                     },
                                     "type": "object"
@@ -328,7 +328,7 @@
                     "200": {
                         "description": "Compte supprimé avec succès",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -340,7 +340,7 @@
                                             "example": "Compte supprimé avec succès"
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Account"
                                         }
                                     },
                                     "type": "object"
@@ -377,7 +377,7 @@
                 "requestBody": {
                     "required": false,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "properties": {
                                     "titulaire": {
@@ -416,7 +416,7 @@
                     "200": {
                         "description": "Compte mis à jour avec succès",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -428,7 +428,7 @@
                                             "example": "Compte mis à jour avec succès"
                                         },
                                         "data": {
-                                            "$ref": "#\/components\/schemas\/Account"
+                                            "$ref": "#/components/schemas/Account"
                                         }
                                     },
                                     "type": "object"
@@ -448,7 +448,7 @@
                 }
             }
         },
-        "\/v1\/accounts\/{numero}\/bloquer": {
+        "/v1/accounts/{numero}/bloquer": {
             "post": {
                 "tags": [
                     "Comptes"
@@ -470,7 +470,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "motif",
@@ -506,7 +506,7 @@
                     "200": {
                         "description": "Account blocked successfully",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -549,9 +549,9 @@
                     "400": {
                         "description": "Compte non actif ou données invalides",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -559,9 +559,9 @@
                     "404": {
                         "description": "Compte non trouvé",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -569,9 +569,9 @@
                     "422": {
                         "description": "Validation erreur",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -579,9 +579,9 @@
                     "429": {
                         "description": "Trop de requêtes",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -589,7 +589,7 @@
                 }
             }
         },
-        "\/v1\/accounts\/{numero}\/debloquer": {
+        "/v1/accounts/{numero}/debloquer": {
             "post": {
                 "tags": [
                     "Comptes"
@@ -611,7 +611,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application\/json": {
+                        "application/json": {
                             "schema": {
                                 "required": [
                                     "motif"
@@ -631,7 +631,7 @@
                     "200": {
                         "description": "Account unblocked successfully",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
                                     "properties": {
                                         "success": {
@@ -667,9 +667,9 @@
                     "400": {
                         "description": "Compte non bloqué",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -677,9 +677,9 @@
                     "404": {
                         "description": "Compte non trouvé",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -687,9 +687,9 @@
                     "422": {
                         "description": "Validation erreur",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -697,12 +697,100 @@
                     "429": {
                         "description": "Trop de requêtes",
                         "content": {
-                            "application\/json": {
+                            "application/json": {
                                 "schema": {
-                                    "$ref": "#\/components\/schemas\/ErrorResponse"
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Authentification (login)",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Authentification réussie"
+                    },
+                    "401": {
+                        "description": "Identifiants invalides"
+                    }
+                }
+            }
+        },
+        "/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Renouveler le token",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "refresh_token": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Token renouvelé"
+                    },
+                    "400": {
+                        "description": "Refresh token manquant"
+                    }
+                }
+            }
+        },
+        "/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Déconnexion (requiert Bearer token)",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Déconnexion réussie"
                     }
                 }
             }
@@ -804,7 +892,7 @@
                             },
                             "path": {
                                 "type": "string",
-                                "example": "\/api\/v1\/accounts"
+                                "example": "/api/v1/accounts"
                             },
                             "traceId": {
                                 "type": "string",
@@ -825,7 +913,7 @@
                 "required": true,
                 "schema": {
                     "type": "string",
-                    "example": "application\/json"
+                    "example": "application/json"
                 }
             },
             "AcceptHeader": {
@@ -835,7 +923,7 @@
                 "required": true,
                 "schema": {
                     "type": "string",
-                    "example": "application\/json"
+                    "example": "application/json"
                 }
             },
             "AcceptLanguageHeader": {
@@ -868,6 +956,14 @@
                     "example": "v1"
                 }
             }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Utilisez Bearer <access_token> obtenu via /api/v1/auth/login"
+            }
         }
     },
     "tags": [
@@ -878,6 +974,6 @@
     ],
     "externalDocs": {
         "description": "Documentation de l'API",
-        "url": "https:\/\/example.com\/docs"
+        "url": "https://example.com/docs"
     }
 }
