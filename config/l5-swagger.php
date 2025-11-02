@@ -224,6 +224,13 @@ return [
                     'in' => 'header', // The location of the API key. Valid values are "query" or "header".
                 ],
                 */
+                // Add an explicit Bearer auth scheme so Swagger UI shows an "Authorize" button
+                'bearerAuth' => [
+                    'type' => 'http',
+                    'scheme' => 'bearer',
+                    'bearerFormat' => 'JWT',
+                    'description' => 'Utilisez Bearer <access_token> obtenu via /api/v1/auth/login',
+                ],
             ],
             'security' => [
                 /*

@@ -13,6 +13,25 @@ class AuthController extends Controller
     use ApiResponseTrait;
 
     /**
+     * @OA\Post(
+     *     path="/api/v1/auth/login",
+     *     tags={"Auth"},
+     *     summary="Authentifier un utilisateur et obtenir un access token",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="password", type="string", format="password"),
+     *             @OA\Property(property="scope", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Authentification réussie"),
+     *     @OA\Response(response=401, description="Identifiants invalides")
+     * )
+     */
+
+    /**
      * Login using Passport Password Grant (requires PASSPORT_PASSWORD_CLIENT_ID & SECRET in env)
      */
     public function login(Request $request)
@@ -117,6 +136,22 @@ class AuthController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *     path="/api/v1/auth/refresh",
+     *     tags={"Auth"},
+     *     summary="Renouveler le token d'accès en utilisant le refresh token",
+     *     @OA\RequestBody(
+     *         required=false,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="refresh_token", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Token renouvelé"),
+     *     @OA\Response(response=400, description="Refresh token manquant")
+     * )
+     */
+
+    /**
      * Logout: revoke current token and refresh token
      */
     public function logout(Request $request)
@@ -154,4 +189,15 @@ class AuthController extends Controller
             return $this->errorResponse('Erreur lors de la déconnexion: ' . $e->getMessage(), 500);
         }
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/auth/logout",
+     *     tags={"Auth"},
+     *     summary="Déconnexion (révocation du token)",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Déconnexion réussie"),
+     *     @OA\Response(response=500, description="Erreur interne")
+     * )
+     */
 }
