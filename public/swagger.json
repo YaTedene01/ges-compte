@@ -968,8 +968,12 @@
     },
     "tags": [
         {
+            "name": "Auth",
+            "description": "Endpoints d'authentification (login, refresh, logout)"
+        },
+        {
             "name": "Comptes",
-            "description": "endpoint de gestion des comptes bancaires"
+            "description": ""
         }
     ],
     "externalDocs": {
