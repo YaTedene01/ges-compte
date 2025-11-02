@@ -33,7 +33,7 @@ services:
       - key: L5_SWAGGER_CONST_HOST
         value: https://ges-compte.onrender.com
       - key: L5_SWAGGER_BASE_PATH
-        value: /api
+        value: /api/v1
       - key: LOG_CHANNEL
         value: stack
       - key: SESSION_DRIVER
@@ -59,7 +59,10 @@ services:
         value: YOUR_DB_PASSWORD
     buildCommand: |
       composer install --no-dev --optimize-autoloader
+      # Generate Swagger docs
       composer run-script generate-swagger
+      # Install Passport (creates keys and clients) non-interactively so auth works in prod
+      php artisan passport:install --no-interaction || true
       # Run migrations; run seeders only when RUN_SEEDERS is set to "true"
       if [ "${RUN_SEEDERS:-false}" = "true" ]; then
         php artisan migrate --force --seed
