@@ -65,3 +65,32 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # ges-compte
+
+## Déploiement sur Render (migrations automatiques)
+
+Ce dépôt contient une configuration `render.yaml` prête à exécuter les migrations et seeders pendant la phase de build.
+
+Checklist minimale pour déployer sur Render (Railway semblable) :
+
+- Dans le Dashboard Render, ajoutez les secrets suivants (ou configurez `DATABASE_URL`):
+	- `db-host`, `db-port`, `db-name`, `db-username`, `db-password` (ou `DATABASE_URL` complet)
+	- `app-url` (url publique de l'app)
+- Assurez-vous que `RUN_SEEDERS` est réglé sur `true` si vous voulez exécuter les seeders en production (optionnel).
+- `render.yaml` contient une étape `buildCommand` qui exécute :
+
+```sh
+composer install --no-dev --optimize-autoloader
+composer run-script generate-swagger
+# Run migrations; run seeders only when RUN_SEEDERS is set to "true"
+if [ "${RUN_SEEDERS:-false}" = "true" ]; then
+	php artisan migrate --force --seed
+else
+	php artisan migrate --force
+fi
+```
+
+Remarques de sécurité :
+- Ne stockez jamais de secrets (passwords, client secrets) dans le dépôt. Utilisez les secrets Render.
+- En production, mettez `APP_DEBUG=false`.
+
+Si vous voulez que j'intègre une étape supplémentaire (ex: healthcheck post-migration ou rollback automatique en cas d'échec), dites-le et je l'ajoute.

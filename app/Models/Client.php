@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Observers\ClientObserver;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Client extends Model
+class Client extends Authenticatable
 {
     use HasFactory;
+    use HasApiTokens;
 
     public $incrementing = false;
     protected $keyType = 'string';

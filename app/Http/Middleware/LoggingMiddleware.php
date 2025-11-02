@@ -4,25 +4,31 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\OperationLog;
 
 class LoggingMiddleware
 {
-    /**
-     * Handle an incoming request.
-     */
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
 
-        Log::info('API Operation', [
-            'method' => $request->method(),
-            'url' => $request->fullUrl(),
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'status' => $response->status(),
-        ]);
+        try {
+            $user = $request->user();
+            $userId = is_object($user) ? ($user->id ?? null) : null;
+            OperationLog::create([
+                'user_id' => $userId,
+                'method' => $request->method(),
+                'path' => $request->path(),
+                'payload' => json_encode($request->all()),
+                'status' => $response->getStatusCode(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } catch (\Exception $e) {
+            // don't break the request on logging failure
+        }
 
         return $response;
     }
 }
+

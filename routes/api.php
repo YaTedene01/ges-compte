@@ -15,8 +15,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
-    // Account management routes
-    Route::resource('accounts', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['accounts' => 'numero']);
-    Route::post('accounts/{numero}/bloquer', [App\Http\Controllers\Api\V1\CompteController::class, 'bloquer']);
-    Route::post('accounts/{numero}/debloquer', [App\Http\Controllers\Api\V1\CompteController::class, 'debloquer']);
+    // Authentication routes (public)
+    Route::prefix('auth')->group(function () {
+        Route::post('login', [App\Http\Controllers\Api\V1\AuthController::class, 'login']);
+        Route::post('refresh', [App\Http\Controllers\Api\V1\AuthController::class, 'refresh']);
+        Route::post('logout', [App\Http\Controllers\Api\V1\AuthController::class, 'logout'])->middleware('auth:api');
+    });
+
+    // Protected API routes (require authentication)
+    Route::middleware(['auth:api', 'log.ops', 'role'])->group(function () {
+        // Account management routes
+        Route::resource('accounts', App\Http\Controllers\Api\V1\CompteController::class)->parameters(['accounts' => 'numero']);
+        Route::post('accounts/{numero}/bloquer', [App\Http\Controllers\Api\V1\CompteController::class, 'bloquer']);
+        Route::post('accounts/{numero}/debloquer', [App\Http\Controllers\Api\V1\CompteController::class, 'debloquer']);
+    });
 });
